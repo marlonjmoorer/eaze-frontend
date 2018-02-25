@@ -1,32 +1,31 @@
 <template>
   <div id="app">
-     <b-alert show>Default Alert</b-alert>
-     <button @click="login">Login</button>
-      <button @click="LOGOUT">Login</button>
+      <nav-bar/>
+      <router-view></router-view>
   </div>
 </template>
 
 <script>
 import {mapActions,mapMutations} from "vuex"
 import {Api} from "./Api"
+import NavBar from './components/NavBar.vue';
 export default {
   name: 'app',
+  components:{NavBar},
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
   },
-  methods:{
-      ...mapActions(["login"]),
-      ...mapMutations(["LOGOUT"])
-  },
-  created(){
-   
-  }
+ 
 }
 </script>
 
-<style>
 
+<style>
+html,body{
+  width: 100vw;
+  height: 100%;
+}
 
 </style>
