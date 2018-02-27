@@ -1,16 +1,6 @@
 <template>
 <div>
-     <b-alert  :show="errors.length>0" 
-         variant="danger" 
-         dismissible
-          @dismissed="errors=[]"
-             >
-             <ul>
-                 <li v-for="err in errors" :key="err" >
-                    {{err}}
-                </li>
-             </ul>
-    </b-alert>
+    
     <div class="wrapper" >
    
     <b-card bg-variant="dark"
@@ -55,12 +45,16 @@
                         placeholder="Email"
                         required
                         v-model="email"
+                        :state="validField('email')"
                     />
                     <div v-if="!email" class="invalid-feedback">
                        Email is required.
                     </div>
                     <div v-if="email && !validEmail" class="invalid-feedback">
                        Please enter a valid email address
+                    </div>
+                    <div v-if="errors" class="invalid-feedback">
+                            {{errorsFor("email")[0]}}
                     </div>
                 </b-form-group>
             </b-col>
@@ -71,11 +65,17 @@
                     <b-form-input
                         placeholder="Password"
                         v-model="password"
-                        required type="password"
+                        required 
+                        type="password"
+                        :state="validField('password')"
                     />
-                    <div class="invalid-feedback">
+                    <div v-if="!password" class="invalid-feedback">
                        Passwod is required.
                     </div>
+                    <div v-if="errors" class="invalid-feedback">
+                            {{errorsFor("password")[0]}}
+                    </div>
+                    
                 </b-form-group>
             </b-col>
         </b-row>
@@ -129,7 +129,7 @@ export default {
         password:"",
         confirm:"",
         success:false,
-        errors:[]
+        errors:null
 
     }),
     computed:{
@@ -147,14 +147,24 @@ export default {
             &&this.password
             &&this.confirm
             &&this.passwordsMatch
-        }
+        },
+        
+
+        
 
     },
     methods:{
         ...mapActions(['signup']),
+        errorsFor(key){
+            if(this.errors&&this.errors[key]){
+                return this.errors[key]
+            }
+        },
+        validField(key){
+           return !this.validated ? '':!(this.errors&&this.errors[key])
+        },
         submit(){
             this.validated=true
-            this.errors=[]
             if(this.valid){
                 let {email ,password,first_name,last_name}=this
                 let data={
@@ -170,7 +180,7 @@ export default {
                     }
                 }).catch(err=>{
                     if(err.response.data){
-                        this.errors=Object.values(err.response.data).map(e=>e[0])
+                        this.errors=err.response.data
                     }
                 })
 
