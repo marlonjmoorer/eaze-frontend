@@ -5,6 +5,7 @@ import SignIn from './components/SignIn.vue';
 import { store } from './store';
 import NewPost from './components/NewPost.vue';
 import Post from './components/Post.vue';
+import Signup from './components/Signup.vue';
 
 Vue.use(VueRouter)
 const NoAuth= (to, from, next)=> {
@@ -14,6 +15,13 @@ const NoAuth= (to, from, next)=> {
       next()
     }
 }
+const LoginRequired=()=>{
+    if (store.getters.loggedIn) {
+        next()
+    } else {
+        next("/signin")
+    }
+}
   
 export const router = new VueRouter({
     routes:[
@@ -21,6 +29,11 @@ export const router = new VueRouter({
         {
             path:"/signin",
             component:SignIn,
+            beforeEnter:NoAuth
+        },
+        {
+            path:"/signup",
+            component:Signup,
             beforeEnter:NoAuth
         },
         {   
