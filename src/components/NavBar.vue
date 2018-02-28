@@ -30,7 +30,7 @@
                 Signin
                  <i class="fas fa-sign-in-alt"></i>
          </b-button> 
-         <b-button  to="/foo" size="sm" variant="outline-info" >
+         <b-button  to="/signup" size="sm" variant="outline-info" >
                 Signup
                 <i class="fas fa-user-plus"></i>
          </b-button>

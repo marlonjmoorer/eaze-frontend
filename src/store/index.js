@@ -24,9 +24,9 @@ export const store= new Vuex.Store({
         SET_POSTS(state,posts){
             state.posts=posts
         }, 
+        
     },actions:{
         login({commit},form){
-            console.log(form)
             return Api.post("/token/",form).then(res=>{
                 console.log(res.data)
                 return commit("SET_TOKEN",res.data.token)
@@ -45,7 +45,11 @@ export const store= new Vuex.Store({
         },
         publishPost({commit},post){
             return Api.post("/post/",post).then(res=>res.status)
+        },
+        signup(context,data){
+            return Api.post("/users/",data)
         }
+
     }
 })
 
