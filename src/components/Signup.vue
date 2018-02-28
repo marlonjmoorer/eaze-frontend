@@ -1,16 +1,5 @@
 <template>
-<div>
-    
-    <div class="wrapper" >
-   
-    <b-card bg-variant="dark"
-            text-variant="white-text"
-            header="Signup"
-            header-tag="header"
-            header-bg-variant="dark"
-            header-text-variant="white">
-   
-    <b-form :validated="validated" @submit.prevent="submit" novalidate="" >
+<form-wrapper header="Signup" :submit="onSubmit" >
         <b-row>
             <b-col>
                 <b-form-group >
@@ -97,11 +86,8 @@
             </b-col>
         </b-row>
       
-      <b-button type="submit" variant="primary">Submit</b-button>
-    </b-form>
-   </b-card>
-   
-
+      <b-button type="submit" variant="info">Submit</b-button>
+  
   <!-- Modal Component -->
   <b-modal v-model="success" modal-tile="Success" >
     <h3>You signup was successful!</h3>
@@ -111,26 +97,25 @@
          </b-btn>
     </div>
   </b-modal>
-</div>
-</div>
+</form-wrapper>
 
    
 </template>
 
 <script>
 import {mapActions} from 'vuex'
+import FormWrapper from './FormWrapper.vue';
 export default {
+    extends:{...FormWrapper},
+    components:{FormWrapper},
     data:()=>({
-        validated:false,
-        
         first_name:"",
         last_name:"",
         email:"",
         password:"",
         confirm:"",
         success:false,
-        errors:null
-
+       
     }),
     computed:{
         validEmail:function(){
@@ -155,16 +140,9 @@ export default {
     },
     methods:{
         ...mapActions(['signup']),
-        errorsFor(key){
-            if(this.errors&&this.errors[key]){
-                return this.errors[key]
-            }
-        },
-        validField(key){
-           return !this.validated ? '':!(this.errors&&this.errors[key])
-        },
-        submit(){
-            this.validated=true
+        onSubmit(){
+           
+           
             if(this.valid){
                 let {email ,password,first_name,last_name}=this
                 let data={
@@ -192,16 +170,6 @@ export default {
 </script>
 
 <style scopped>
-    
-    .wrapper{
-        height: 75vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .card{
-        width: 45%;
-        
-    }
+
 
 </style>
