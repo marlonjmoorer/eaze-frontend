@@ -5,7 +5,12 @@
           bg-variant="dark"
           header="New Post"
           text-variant="white">
-              <b-row>
+
+            <b-form-group
+                label="Title *" >
+                <b-form-input :required='true' v-model="title" ></b-form-input>
+            </b-form-group>
+            <!--   <b-row>
                 <b-img v-if="previewUrl" :src="previewUrl" alt="Responsive image" />
               </b-row>
               <b-row>
@@ -16,24 +21,21 @@
                     </b-button-group>
                 </b-col>
                
+              </b-row> -->
+              <label type="label" class="btn btn-info" for="image" variant="info">
+                <i class="fas fa-image"></i> Add Media
+                 <b-form-file id="image" v-show="false" accept="image/*" v-model="image.file" placeholder="Image File" ></b-form-file>
+              </label>
+              <span v-if="image.file" variant="primary">
+                {{image.file.name}} <b-badge href="#" @click="image.file=null" variant="danger">X</b-badge>
+              </span>
+              <b-row>
+                <b-img v-if="previewUrl" :src="previewUrl" alt="Responsive image" />
               </b-row>
+              
+        
              
-              <b-form-group
-               label="Image">
-                  <b-form-input v-if="image.external" v-model="image.url" placeholder="Image Url" ></b-form-input>
-                  <b-form-file v-else accept="image/*" v-model="image.file" placeholder="Image File" ></b-form-file>
-                  
-                  <b-form-checkbox id="checkbox1"
-                     v-model="image.external"
-                    >
-                    External
-                  </b-form-checkbox>
-              </b-form-group>
-             
-              <b-form-group
-                  label="Title *" >
-                  <b-form-input :required='true' v-model="title" ></b-form-input>
-              </b-form-group>
+            
               <b-form-group
                 label="Body *">
                 <b-form-textarea id="textarea1"
@@ -44,7 +46,8 @@
                       :max-rows="1000">
                   </b-form-textarea>
               </b-form-group>
-             
+              <b-button @click="submitPost" variant="success">Publish</b-button>
+                      <b-button variant="info">Save as Draft</b-button>
                
             
   </b-card>
@@ -94,7 +97,7 @@ export default {
            form.append("imageUrl",this.image.url)
          }
          else{
-           form.append("imageFile",this.image.file)
+           form.append("image",this.image.file)
          }
          
          this.publishPost(form).then(status=>{

@@ -18,7 +18,7 @@
       <b-nav-item-dropdown v-if="loggedIn" right >
         <!-- Using button-content slot -->
         <template slot="button-content">
-          <em>User</em>
+          <em>{{user.full_name}}</em>
         </template>
         <b-dropdown-item href="#">Profile</b-dropdown-item>
         <b-dropdown-item href="#" @click="LOGOUT" >Signout</b-dropdown-item>
@@ -44,12 +44,13 @@
 
 <script>
 
-import {mapGetters,mapMutations,mapActions} from 'vuex'
+import {mapGetters,mapMutations,mapActions,mapState} from 'vuex'
 export default {
     data:()=>({
         
     }),
     computed:{
+        ...mapState(["user"]),
         ...mapGetters(["loggedIn"])
     },methods:{
         ...mapMutations(['LOGOUT']),

@@ -3,7 +3,7 @@ import Vue from 'vue'
 import Home from './components/Home.vue';
 import SignIn from './components/SignIn.vue';
 import { store } from './store';
-import NewPost from './components/NewPost.vue';
+import EditPost from './components/EditPost.vue';
 import Post from './components/Post.vue';
 import Signup from './components/Signup.vue';
 
@@ -38,7 +38,12 @@ export const router = new VueRouter({
         },
         {   
             path:"/new-post",
-            component:NewPost
+            component:EditPost
+        },
+        {   
+            path:"/edit-post/:postId",
+            component:EditPost,
+            props:true
         },
         {   
             path:"/post/:postId",

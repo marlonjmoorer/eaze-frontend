@@ -15,7 +15,7 @@
       <b-row>
         <b-col :key="p.id" v-for="p in posts"  sm="6">
               <b-card   bg-variant="dark"
-                    :img-src="p.imageUrl||'http://via.placeholder.com/350x150'"
+                    :img-src="p.image||'http://via.placeholder.com/350x150'"
                     img-alt="Image"
                     img-top
                     tag="article"

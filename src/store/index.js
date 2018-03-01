@@ -6,19 +6,22 @@ Vue.use(Vuex)
 export const store= new Vuex.Store({
     state:{
         token:localStorage.getItem("token"),
-        posts:[]
+        posts:[],
+        user:localStorage.getItem("user")
     },
     getters:{
         loggedIn:state=> state.token!=null
     },
     mutations:{
-        SET_TOKEN(state,token){
+        LOGIN_SUCESS(state,{token,user}){
             console.log(token)
             localStorage.setItem("token",token)
+            localStorage.setItem("user",user)
             state.token=token
+            state.user=user
         },
         LOGOUT(state){
-            state.token=null
+            state.token=state.user=null
             localStorage.removeItem("token")
         },
         SET_POSTS(state,posts){
@@ -27,9 +30,9 @@ export const store= new Vuex.Store({
         
     },actions:{
         login({commit},form){
-            return Api.post("/token/",form).then(res=>{
+            return Api.post("/login/",form).then(res=>{
                 console.log(res.data)
-                return commit("SET_TOKEN",res.data.token)
+                return commit("LOGIN_SUCESS",res.data)
             })
         },
         loadPostList({commit}){
