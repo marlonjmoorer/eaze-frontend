@@ -7,7 +7,8 @@ export const store= new Vuex.Store({
     state:{
         token:localStorage.getItem("token"),
         posts:[],
-        user:localStorage.getItem("user")
+        user:localStorage.getItem("user"),
+        currentPost:{}
     },
     getters:{
         loggedIn:state=> state.token!=null
@@ -26,7 +27,10 @@ export const store= new Vuex.Store({
         },
         SET_POSTS(state,posts){
             state.posts=posts
-        }, 
+        },
+        POST_FETCHED(state,post){
+            state.currentPost=post
+        } 
         
     },actions:{
         login({commit},form){
@@ -43,7 +47,7 @@ export const store= new Vuex.Store({
         getPost({commit},id){
             console.log(id)
             return Api.get(`/post/${id}`).then(res=>{
-                return res.data
+                commit("POST_FETCHED",res.data)
             })
         },
         publishPost({commit},post){
@@ -51,6 +55,11 @@ export const store= new Vuex.Store({
         },
         signup(context,data){
             return Api.post("/users/",data)
+        },
+        addComment({dispatch},comment){
+            return Api.post(`/comments/`,comment).then(res=>{
+                dispatch("getPost",res.data.post)
+            })
         }
 
     }

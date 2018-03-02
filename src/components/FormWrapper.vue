@@ -4,7 +4,8 @@
             text-variant="white-text"
             :header="header"
             header-tag="header"
-            header-text-variant="info">
+            header-bg-variant="info"
+            header-text-variant="white">
         <b-form :validated="validated" @submit.prevent="setSubmitted" novalidate="" >
        <slot>
           

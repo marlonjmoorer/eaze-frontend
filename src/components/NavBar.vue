@@ -1,5 +1,5 @@
 <template>
-  <b-navbar toggleable="md" type="dark" variant="dark">
+  <b-navbar toggleable="md" type="dark" variant="info">
 
   <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
@@ -10,12 +10,12 @@
     
     <b-nav-form class="ml-5" >
         <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
-        <b-button size="sm" class="my-2 my-sm-0" variant="outline-info" type="submit">Search</b-button>
+        <b-button size="sm" class="my-2 my-sm-0" variant="" type="submit">Search</b-button>
     </b-nav-form>
     <!-- Right aligned nav items -->
     <b-navbar-nav class="ml-auto">
 
-      <b-nav-item-dropdown v-if="loggedIn" right >
+      <b-nav-item-dropdown v-if="loggedIn" right  >
         <!-- Using button-content slot -->
         <template slot="button-content">
           <em>{{user.full_name}}</em>
@@ -26,11 +26,11 @@
       </b-nav-item-dropdown>
       <template v-else>
          
-         <b-button to="/signin" size="sm" class="text-info" variant="link" >
+         <b-button to="/signin" size="sm" class="mr-1"  >
                 Signin
                  <i class="fas fa-sign-in-alt"></i>
          </b-button> 
-         <b-button  to="/signup" size="sm" variant="outline-info" >
+         <b-button  to="/signup" size="sm"  >
                 Signup
                 <i class="fas fa-user-plus"></i>
          </b-button>
