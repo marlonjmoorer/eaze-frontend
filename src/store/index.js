@@ -44,21 +44,25 @@ export const store= new Vuex.Store({
                 commit("SET_POSTS",res.data)
             })
         },
-        getPost({commit},id){
-            console.log(id)
-            return Api.get(`/post/${id}`).then(res=>{
+        getPost({commit},slug){
+            return Api.get(`/post/${slug}`).then(res=>{
                 commit("POST_FETCHED",res.data)
             })
         },
-        publishPost({commit},post){
-            return Api.post("/post/",post).then(res=>res.status)
+        publishPost({commit},form){
+            console.log(form)
+            const image=form.get("image")
+           
+            return Api.post("/post/",form).then(res=>res.status)
+           //return Api.post("/post/",form).then(res=>res.status)
         },
         signup(context,data){
             return Api.post("/users/",data)
         },
         addComment({dispatch},comment){
             return Api.post(`/comments/`,comment).then(res=>{
-                dispatch("getPost",res.data.post)
+                console.log(res.data)
+                dispatch("getPost",comment.slug)
             })
         }
 

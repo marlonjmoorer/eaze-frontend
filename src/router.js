@@ -41,12 +41,12 @@ export const router = new VueRouter({
             component:EditPost
         },
         {   
-            path:"/edit-post/:postId",
+            path:"/edit-post/:slug",
             component:EditPost,
             props:true
         },
         {   
-            path:"/post/:postId",
+            path:"/post/:slug",
             component:Post,
             props: true
         }

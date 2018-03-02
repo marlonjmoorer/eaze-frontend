@@ -13,19 +13,8 @@
   </b-card>
     <b-container>
       <b-row>
-        <b-col :key="p.id" v-for="p in posts"  sm="6">
-              <b-card   bg-variant="dark"
-                    :img-src="p.image||'http://via.placeholder.com/350x150'"
-                    img-alt="Image"
-                    img-top
-                    tag="article"
-                    text-variant="white"
-                    class="mb-2">
-                <p class="card-text">
-                  {{p.title}}
-                </p>                
-              <b-button href="#" :to="`/post/${p.id}`" variant="primary">Go somewhere</b-button>
-            </b-card>
+        <b-col :key="post.id" v-for="post in posts"  sm="6" md="4"  >
+             <post-list-item :post="post" />
         </b-col>              
       </b-row>   
     </b-container>
@@ -39,8 +28,11 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import PostListItem from './PostListItem.vue';
+
 export default {
   data: () => ({}),
+  components:{PostListItem},
   computed: {
     ...mapState(["posts"])
   },

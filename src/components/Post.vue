@@ -9,14 +9,15 @@
              <hr/>
                 {{ posted_date}}
              <hr/>
-            <b-row>
+            <b-row v-if="post.image" >
                 <b-col class="banner">
                      <b-img :src="post.image" fluid alt="Responsive image"  />
                 </b-col>
+                <hr/>
             </b-row>
                
               
-             <hr/>
+             
              <p v-html="post.body"></p>
              <hr/>
              <b-form @submit.prevent="postComment" >
@@ -51,7 +52,7 @@ import {mapActions,mapState} from 'vuex'
 import CommentList from './CommentList.vue';
 
 export default {
-    props:["postId"],
+    props:["slug"],
     components:{
         CommentList
     },
@@ -59,13 +60,13 @@ export default {
         commentBody:""
     }),
     created(){
-        this.getPost(this.postId)
+        this.getPost(this.slug)
     },methods:{
         ...mapActions(['getPost',"addComment"]),
         postComment(){
             if(this.commentBody){
                 let data={
-                    post:this.postId,
+                    slug:this.slug,
                     body:this.commentBody
                 }
                 console.log(data)
@@ -88,7 +89,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .banner{
    /*  max-width: 500px; */
     max-height: 300px;
