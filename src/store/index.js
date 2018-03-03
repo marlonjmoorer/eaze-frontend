@@ -7,19 +7,21 @@ export const store= new Vuex.Store({
     state:{
         token:localStorage.getItem("token"),
         posts:[],
-        user:localStorage.getItem("user"),
+       // user:localStorage.getItem("user"),
         currentPost:{}
     },
     getters:{
+        //user:()=>({}),
+        user:()=>JSON.parse(localStorage.getItem("user")),
         loggedIn:state=> state.token!=null
     },
     mutations:{
         LOGIN_SUCESS(state,{token,user}){
             console.log(token)
             localStorage.setItem("token",token)
-            localStorage.setItem("user",user)
+            localStorage.setItem("user",JSON.stringify(user))
             state.token=token
-            state.user=user
+          //  state.user=user
         },
         LOGOUT(state){
             state.token=state.user=null

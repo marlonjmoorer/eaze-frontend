@@ -97,6 +97,9 @@ export default {
 img{
     width: 100%;
      height: 200px !important;
-   /* width: 600px; */
+   
+}
+body{
+    background: white
 }
 </style>

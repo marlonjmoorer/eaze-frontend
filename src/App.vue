@@ -27,5 +27,8 @@ html,body{
   width: 100vw;
   height: 100%;
 }
+body{
+  /* background:#e0e0db */
+}
 
 </style>
