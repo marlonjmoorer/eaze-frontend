@@ -61,11 +61,14 @@ export default {
   margin-bottom: 25px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  background-size:     cover;                 
-  background-repeat:   no-repeat;
-  background-position: center center;   
-  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgqG5nHhkyV-q-MR9BSPZ2Aj-VWvAyM3Akt1E-oE55fx0ah9fpHQ')
+  justify-content: center;               
+  background:linear-gradient(
+      #17a2b852, 
+      #17a2b852
+    ),
+     url('https://upload.wikimedia.org/wikipedia/commons/0/02/Moscow-City_%2836211143494%29.jpg')
+    no-repeat center;
+  background-size:cover;  
 }
 .banner .banner-logo{
   background-color: #dc3545;

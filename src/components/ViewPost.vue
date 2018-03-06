@@ -2,24 +2,7 @@
  <b-container>
      <b-row>
          <b-col md="8" sm="12">
-             <h1 class="mt-4">{{post.title}}</h1>
-             <p class="lead">
-                by <a href="#">{{post.author}}</a>
-             </p>
-             <hr/>
-                {{ posted_date}}
-             <hr/>
-            <b-row v-if="post.image" >
-                <b-col class="banner">
-                     <b-img :src="post.image" fluid alt="Responsive image"  />
-                </b-col>
-                <hr/>
-            </b-row>
-               
-              
-             
-             <p v-html="post.body"></p>
-             <hr/>
+            <post-content :post="post||{}"/>
              <b-form @submit.prevent="postComment" >
                 <b-form-group 
                         label="Comment">
@@ -29,7 +12,6 @@
                         :max-rows="100">
                     </b-form-textarea>
                 </b-form-group>
-                
                 <b-button type="submit" variant="info">Submit</b-button>
             </b-form>
              <b-form-group >
@@ -50,11 +32,13 @@
 <script>
 import {mapActions,mapState} from 'vuex'
 import CommentList from './CommentList.vue';
+import PostContent from './PostContent.vue';
 
 export default {
     props:["slug"],
     components:{
-        CommentList
+        CommentList,
+        PostContent
     },
     data:()=>({
         commentBody:""

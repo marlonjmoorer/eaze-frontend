@@ -9,6 +9,7 @@
 import {mapActions,mapMutations} from "vuex"
 import {Api} from "./Api"
 import NavBar from './components/NavBar.vue';
+import {mapGetters}from "vuex"
 export default {
   name: 'app',
   components:{NavBar},
@@ -17,6 +18,19 @@ export default {
       msg: 'Welcome to Your Vue.js App'
     }
   },
+  watch:{
+    loggedIn(val,oldVal){
+      if(oldVal&&!val){
+        this.$router.push("/")
+      }
+    }
+  },
+  computed:{
+    ...mapGetters(["loggedIn"])
+  },
+  created(){
+    console.log(this.$router)
+  }
  
 }
 </script>

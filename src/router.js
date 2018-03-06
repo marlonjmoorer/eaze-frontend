@@ -4,7 +4,7 @@ import Home from './components/Home.vue';
 import SignIn from './components/SignIn.vue';
 import { store } from './store';
 import EditPost from './components/EditPost.vue';
-import Post from './components/Post.vue';
+import ViewPost from './components/ViewPost.vue';
 import Signup from './components/Signup.vue';
 
 Vue.use(VueRouter)
@@ -15,7 +15,7 @@ const NoAuth= (to, from, next)=> {
       next()
     }
 }
-const LoginRequired=()=>{
+const LoginRequired=(to, from, next)=>{
     if (store.getters.loggedIn) {
         next()
     } else {
@@ -38,16 +38,18 @@ export const router = new VueRouter({
         },
         {   
             path:"/new-post",
-            component:EditPost
+            component:EditPost,
+            beforeEnter:LoginRequired
         },
         {   
             path:"/edit-post/:slug",
             component:EditPost,
-            props:true
+            props:true,
+            beforeEnter:LoginRequired
         },
         {   
             path:"/post/:slug",
-            component:Post,
+            component:ViewPost,
             props: true
         }
     ]

@@ -7,11 +7,10 @@ export const store= new Vuex.Store({
     state:{
         token:localStorage.getItem("token"),
         posts:[],
-       // user:localStorage.getItem("user"),
+     
         currentPost:{}
     },
     getters:{
-        //user:()=>({}),
         user:()=>JSON.parse(localStorage.getItem("user")),
         loggedIn:state=> state.token!=null
     },
@@ -52,11 +51,10 @@ export const store= new Vuex.Store({
             })
         },
         publishPost({commit},form){
-            console.log(form)
-            const image=form.get("image")
-           
+            if(form.has("slug")){
+                return Api.put(`/post/${form.get("slug")}/`,form).then(res=>res.status)
+            }
             return Api.post("/post/",form).then(res=>res.status)
-           //return Api.post("/post/",form).then(res=>res.status)
         },
         signup(context,data){
             return Api.post("/users/",data)
