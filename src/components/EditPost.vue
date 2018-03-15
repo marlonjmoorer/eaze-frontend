@@ -84,7 +84,7 @@ export default {
       config:{
          placeholder: 'Body',
       },
-      content:null,
+      content:'',
       showPreview:false,
       existingImage:"",
       isDraft:true
@@ -115,7 +115,7 @@ export default {
         body:this.content,
         posted:new Date(),
         image:this.previewUrl,
-        author:this.user.full_name
+        author:{"user":this.user.full_name}
       }
     }
   },

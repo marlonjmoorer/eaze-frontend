@@ -23,7 +23,7 @@
         <template slot="button-content">
           <em class="text-white">{{user.full_name}}</em>
         </template>
-        <b-dropdown-item href="#">Profile</b-dropdown-item>
+        <b-dropdown-item href="#" to="/profile" >Profile</b-dropdown-item>
         <b-dropdown-item href="#" @click="LOGOUT" >Signout</b-dropdown-item>
         <b-dropdown-item href="#" to="/new-post" >Create Post</b-dropdown-item>
       </b-nav-item-dropdown>

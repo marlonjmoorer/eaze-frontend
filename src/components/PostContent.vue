@@ -2,7 +2,7 @@
 <div>
     <h1 class="mt-4">{{post.title}}</h1>
     <p class="lead">
-        by <a href="#">{{post.author}}</a>
+        by <a href="#">{{post.author.user}}</a>
     </p>
     <hr/>
         {{dateString}}

@@ -6,6 +6,7 @@ import { store } from './store';
 import EditPost from './components/EditPost.vue';
 import ViewPost from './components/ViewPost.vue';
 import Signup from './components/Signup.vue';
+import Profile from './components/Profile.vue';
 
 Vue.use(VueRouter)
 const NoAuth= (to, from, next)=> {
@@ -51,6 +52,16 @@ export const router = new VueRouter({
             path:"/post/:slug",
             component:ViewPost,
             props: true
+        },{
+            path:"/profile",
+            component:Profile
+
+        },
+        {
+            path:"/author/:handle",
+            component:Profile,
+            props:true
+
         }
     ]
 })
