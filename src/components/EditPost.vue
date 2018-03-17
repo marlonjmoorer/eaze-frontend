@@ -104,8 +104,7 @@ export default {
     },
   },
   computed:{
-    ...mapGetters(["user"]),
-    ...mapState(["currentPost"]),
+    ...mapState(["currentPost","user"]),
     previewUrl:function(){
       return this.image.url||(this.image.file?URL.createObjectURL(this.image.file):"");
     },

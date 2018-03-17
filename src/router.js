@@ -54,7 +54,8 @@ export const router = new VueRouter({
             props: true
         },{
             path:"/profile",
-            component:Profile
+            component:Profile,
+            beforeEnter:LoginRequired
 
         },
         {

@@ -30,7 +30,10 @@
               <b-col>
                 <h5>About :</h5>
                 <p>{{profile.about}}</p>
-                
+                <template v-if="!canEdit">
+                  <hr>
+                  <follow-button/>
+                </template>
               </b-col>
               <b-col>
                  
@@ -41,8 +44,8 @@
                             >
                             Hi
                   </b-popover>
-                  <b-badge id="follow" href="#" variant="primary">
-                    <i class="fa fa-user"></i> Following <b-badge variant="light">4</b-badge>
+                  <b-badge id="follow"  href="#" variant="primary">
+                    <i class="fa fa-user"></i> Following <b-badge variant="light">{{profile.following.length}}</b-badge>
                   </b-badge>
                   <b-badge href="#" variant="dark">
                     <i class="fa fa-newspaper"></i> Posts <b-badge variant="light">{{posts.length}}</b-badge>
@@ -68,21 +71,20 @@
      <b-col>
        <b-tabs>
         <b-tab title="Published Post" active>
-          
           <b-row class="mt-3" >
              <b-col :key="post.id" v-for="post in publishedPost"  sm="6" md="6"  >
                 <post-list-item :post="post" :hideFooter="true" />
              </b-col>  
           </b-row>
         </b-tab>
-        <b-tab title="Drafts" >
+        <b-tab title="Drafts" v-if="canEdit" >
           <b-row class="mt-3" >
              <b-col :key="post.id" v-for="post in drafts"  sm="6" md="6"  >
                 <post-list-item :post="post" :hideFooter="true" />
              </b-col>  
           </b-row>
         </b-tab>
-        <b-tab title="Messages" >
+        <b-tab title="Messages" v-if="canEdit" >
           <br>Disabled tab!
         </b-tab>
       </b-tabs>
@@ -95,34 +97,47 @@
 import {mapGetters,mapMutations,mapActions,mapState} from 'vuex'
 import EditProfile from './EditProfile.vue';
 import PostListItem from './PostListItem.vue';
+import FollowButton from './FollowButton.vue';
+
 export default {
   props:['handle'],
-  components:{EditProfile,PostListItem},
+  components:{EditProfile,PostListItem,FollowButton},
   data:()=>({
     currentUser:null
+    
   }),
   computed:{
-    ...mapGetters(["user"]),
-    ...mapState(['profile','posts']),
+    ...mapGetters(["authorsFollowing"]),
+    ...mapState(['profile','posts',"user"]),
     canEdit:function(){
-      return !this.handle//this.profile&&this.profile.user==this.user.full_name
+      return this.profile&&this.profile.handle==this.user.profile.handle
     },
     publishedPost:function(){ return this.posts?this.posts.filter(p=>!p.draft):[]},
-    drafts: function(){return this.posts?this.posts.filter(p=>p.draft):[]}
+    drafts: function(){return this.posts?this.posts.filter(p=>p.draft):[]},
   },
   methods:{
-    ...mapActions(["loadProfile","loadPostForAuthor"])
+    ...mapActions(["loadProfile","loadPostForAuthor","followAuthor"]),
+    follow(){
+      const add= !this.following
+      this.followAuthor({
+          handle:this.profile.handle,
+          add,
+          id:this.profile.id
+      })
+    }
   },
   watch:{
+    handle(handle){
+      this.loadProfile(this.handle)
+    },
     profile(val){
       console.log(val.handle)
       this.loadPostForAuthor(val.handle)
       console.log('changed')
       this.$root.$emit('bv::hide::modal','profileModal')
-      
     }
-  }
-  ,created(){
+  },
+  created(){
     this.loadProfile(this.handle)
   }
 

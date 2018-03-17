@@ -8,22 +8,24 @@ export const store= new Vuex.Store({
         token:localStorage.getItem("token"),
         posts:[],
         currentPost:{},
-        profile:{}
+        profile:{},
+        user:JSON.parse(localStorage.getItem("user"))
     },
     getters:{
-        user:()=>JSON.parse(localStorage.getItem("user")),
+        //user:()=>JSON.parse(localStorage.getItem("user")),
         loggedIn:state=> state.token!=null,
+        authorsFollowing:state=>state.user?state.user.profile.following:[]
     },
     mutations:{
-        LOGIN_SUCESS(state,{token,user}){
+        LOGIN_SUCESS(state,token){
             console.log(token)
             localStorage.setItem("token",token)
-            localStorage.setItem("user",JSON.stringify(user))
             state.token=token
         },
         LOGOUT(state){
             state.token=state.user=null
-            localStorage.removeItem("token")
+            localStorage.removeItem("token"),
+            localStorage.removeItem("user")
         },
         SET_POSTS(state,posts){
             state.posts=posts
@@ -33,13 +35,19 @@ export const store= new Vuex.Store({
         }, 
         PROFILE_FETCHED(state,profile){
             state.profile=profile
+        },
+        USER_FETCHED(state,user){
+            state.user=user
+            localStorage.setItem("user",JSON.stringify(user))
         }
         
     },actions:{
         login({commit},form){
             return Api.post("/login/",form).then(res=>{
                 console.log(res.data)
-                return commit("LOGIN_SUCESS",res.data)
+                const {token , user}= res.data
+                commit("LOGIN_SUCESS",token)
+                commit("USER_FETCHED",user)
             })
         },
         loadPostList({commit}){
@@ -80,6 +88,15 @@ export const store= new Vuex.Store({
         loadPostForAuthor({commit},handle){
             return Api.get(`/author/${handle}/posts`).then(res=>{
                 commit("SET_POSTS",res.data)
+            })
+        },
+        followAuthor({commit,state},data){
+            Api.patch(`/author/${data.handle}/follow`,data).then(res=>{
+              //  commit("PROFILE_FETCHED",res.data)
+            }).then(()=>{
+                return Api.get(`/users/${state.user.id}`).then(res=>{
+                    commit("USER_FETCHED",res.data)
+                })
             })
         }
 

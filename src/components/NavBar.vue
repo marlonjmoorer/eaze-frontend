@@ -53,8 +53,8 @@ export default {
         
     }),
     computed:{
-        //...mapState(["user"]),
-        ...mapGetters(["loggedIn","user"])
+        ...mapState(["user"]),
+        ...mapGetters(["loggedIn"])
     },methods:{
         ...mapMutations(['LOGOUT']),
         ...mapActions(['login'])
