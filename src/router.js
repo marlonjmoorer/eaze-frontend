@@ -59,7 +59,7 @@ export const router = new VueRouter({
 
         },
         {
-            path:"/author/:handle",
+            path:"/profile/:handle",
             component:Profile,
             props:true
 

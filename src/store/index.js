@@ -7,6 +7,7 @@ export const store= new Vuex.Store({
     state:{
         token:localStorage.getItem("token"),
         posts:[],
+        tags:[],
         currentPost:{},
         profile:{},
         user:JSON.parse(localStorage.getItem("user"))
@@ -39,6 +40,9 @@ export const store= new Vuex.Store({
         USER_FETCHED(state,user){
             state.user=user
             localStorage.setItem("user",JSON.stringify(user))
+        },
+        SET_TAGS(state,tags){
+            state.tags=tags
         }
         
     },actions:{
@@ -53,6 +57,11 @@ export const store= new Vuex.Store({
         loadPostList({commit}){
             Api.get("/post").then(res=>{
                 commit("SET_POSTS",res.data)
+            })
+        },
+        loadTagList({commit},query){
+            Api.get("/tags",{params:{q:query}}).then(res=>{
+                commit("SET_TAGS",res.data)
             })
         },
         getPost({commit},slug){
@@ -98,7 +107,7 @@ export const store= new Vuex.Store({
                     commit("USER_FETCHED",res.data)
                 })
             })
-        }
+        },
 
     }
 })

@@ -19,20 +19,78 @@
           header-text-variant="white">
           <b-row slot="header"
                 class="mb-0">
-                <b-col><h6 >New Post</h6></b-col>
-                <b-col md="3">
-                  <b-form-checkbox 
-                    v-model="showPreview"
-                    >
-                    Preview
-                  </b-form-checkbox>
+                <b-col>
+                  <h6 >New Post</h6>
+                </b-col>
+                <b-col  md="6">
+                  <b-button-group>
+                    <b-button 
+                        :pressed.sync="showPreview"
+                          variant="outline-light"
+                          ref="button">
+                        Preveiw
+                    </b-button>
+                    <b-button id="tags"
+                      variant="outline-light"
+                      ref="button">
+                        Tags
+                    </b-button>
+                  
+                  </b-button-group>
+                    <b-popover target="tags"
+                    placement="bottom"
+                    title="Add Tags"
+                    triggers="click">
+
+                      <template slot="title">
+                        <b-btn  class="close" aria-label="Close">
+                          <span class="d-inline-block" aria-hidden="true">&times;</span>
+                        </b-btn>
+                        Tags
+                      </template>
+                      <div>
+                        <b-form-group  label-for="query"
+                                       class="mb-1"
+                                      description="Search for a tag">   
+                          <b-form-input  @keyup.native="searchTags()" id="query"  size="sm" v-model="query" />
+                        </b-form-group>
+                        <b-alert show class="small">
+                          <strong>Current Tags:</strong><br/>
+                            <b-badge href="#"  :key="i" class="mr-1" v-for="(tag,i) in addedTags" >
+                              {{tag.name}}
+                            </b-badge>
+                        </b-alert>
+                        
+                      </div>
+                    </b-popover>
+                    <b-popover
+                     target="query"
+                     triggers="focus"
+                      placement="bottom"
+                     > 
+                     <span v-if="results.length==0">
+                       Type something to start search
+                     </span>
+                     <template v-else>
+                       <b-list-group>
+                        <b-list-group-item
+                          href="#"
+                          @click="appendTag(tag)"
+                          v-for="(tag,i) in results"
+                          :key="i" >
+                          {{tag.name}}
+                         </b-list-group-item>
+                      </b-list-group>
+                     </template>
+
+                    </b-popover>
                 </b-col>
             </b-row>
             <input type="file" v-show="false" ref="fileInput" @change="handleFileChange" accept="image/*"/>
             <b-form-group >
                 <b-form-input :required='true' v-model="title" placeholder="Title" ></b-form-input>
             </b-form-group>
-            <b-dropdown id="ddown1" text="Add" class="m-md-2">
+            <b-dropdown id="ddown1" text="Add" dropup  class="m-md-2">
               <b-dropdown-item @click="getFile"> 
                 <i class="fas fa-image"></i> Image File
               </b-dropdown-item>
@@ -47,11 +105,7 @@
                 {{image.file.name}} <b-badge href="#" @click="image.file=null" variant="danger">X</b-badge>
               </span>
              
-             <!--  <b-row class="mb-3">
-                <b-img class="preview" v-if="previewUrl" :src="previewUrl" alt="Responsive image" />
-              </b-row> -->
-
-              <b-form-group>
+              <b-form-group label="Body" >
                   <vue-html5-editor :content="content" @change="updateContent" :height="500"></vue-html5-editor>
               </b-form-group> 
               <b-button @click="submit(false)" variant="success">Publish</b-button>
@@ -85,6 +139,9 @@ export default {
          placeholder: 'Body',
       },
       content:'',
+      addedTags:[],
+      query:'',
+      //results:[],
       showPreview:false,
       existingImage:"",
       isDraft:true
@@ -104,7 +161,7 @@ export default {
     },
   },
   computed:{
-    ...mapState(["currentPost","user"]),
+    ...mapState(["currentPost","user","tags"]),
     previewUrl:function(){
       return this.image.url||(this.image.file?URL.createObjectURL(this.image.file):"");
     },
@@ -116,10 +173,13 @@ export default {
         image:this.previewUrl,
         author:{"user":this.user.full_name}
       }
+    },
+    results:function(){
+      return this.tags&&this.query? this.tags.filter(tag=>tag.name.toLowerCase().includes(this.query)):[]
     }
   },
   methods:{
-     ...mapActions(['publishPost','getPost']),
+     ...mapActions(['publishPost','getPost',"loadTagList"]),
      updateContent(html){
        this.content=html
      },
@@ -168,7 +228,19 @@ export default {
             })
          }
          return Promise.resolve(form)
-     }
+    },
+    searchTags(){
+      console.log("object")
+      if(this.query){
+        this.loadTagList(this.query)
+      }
+    },
+    appendTag(tag){
+      const exist= this.addedTags.includes(tag)
+      if(!exist){
+        this.addedTags.push(tag)
+      }
+    }
   },
   created(){
     if(this.slug){
@@ -181,7 +253,6 @@ export default {
           if(this.currentPost.image){
             this.existingImage=this.image.url=this.currentPost.image
             this.image.external=true
-            
           }
        });
      })

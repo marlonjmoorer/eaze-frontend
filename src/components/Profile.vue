@@ -30,18 +30,17 @@
               <b-col>
                 <h5>About :</h5>
                 <p>{{profile.about}}</p>
-                <template v-if="!canEdit">
+                <template >
                   <hr>
-                  <follow-button/>
+                  <follow-button :profile="profile"/>
                 </template>
               </b-col>
               <b-col>
                  
                   <b-popover target="follow"
-                   placement="left"
-                            title="Popover!"
-                            triggers="hover focus"
-                            >
+                    placement="left"
+                    title="Popover!"
+                    triggers="hover focus">
                             Hi
                   </b-popover>
                   <b-badge id="follow"  href="#" variant="primary">
@@ -73,7 +72,7 @@
         <b-tab title="Published Post" active>
           <b-row class="mt-3" >
              <b-col :key="post.id" v-for="post in publishedPost"  sm="6" md="6"  >
-                <post-list-item :post="post" :hideFooter="true" />
+                <post-list-item :post="post" :canEdit="true" />
              </b-col>  
           </b-row>
         </b-tab>
@@ -104,7 +103,6 @@ export default {
   components:{EditProfile,PostListItem,FollowButton},
   data:()=>({
     currentUser:null
-    
   }),
   computed:{
     ...mapGetters(["authorsFollowing"]),
@@ -117,23 +115,13 @@ export default {
   },
   methods:{
     ...mapActions(["loadProfile","loadPostForAuthor","followAuthor"]),
-    follow(){
-      const add= !this.following
-      this.followAuthor({
-          handle:this.profile.handle,
-          add,
-          id:this.profile.id
-      })
-    }
   },
   watch:{
     handle(handle){
       this.loadProfile(this.handle)
     },
     profile(val){
-      console.log(val.handle)
       this.loadPostForAuthor(val.handle)
-      console.log('changed')
       this.$root.$emit('bv::hide::modal','profileModal')
     }
   },

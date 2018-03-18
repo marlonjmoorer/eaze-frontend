@@ -20,8 +20,12 @@
             header-bg-variant="info"
             header-text-variant="white"
             align="center">
-      <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-    </b-card>
+
+              <b-badge href="#" :key="i" class="mr-1" v-for="(tag,i) in tags" >
+                {{tag.name}}
+              </b-badge>
+            </b-card>
+            
         </b-col>
                    
       </b-row>
@@ -29,9 +33,6 @@
     </b-container>
     
   </div>
-
-  
-
 
 </template>
 
@@ -43,13 +44,14 @@ export default {
   data: () => ({}),
   components:{PostListItem},
   computed: {
-    ...mapState(["posts"])
+    ...mapState(["posts","tags"])
   },
   methods: {
-    ...mapActions(["loadPostList"])
+    ...mapActions(["loadPostList","loadTagList"])
   },
   created() {
     this.loadPostList();
+    this.loadTagList()
   }
 };
 </script>
