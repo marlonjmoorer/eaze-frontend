@@ -19,7 +19,7 @@
             <b-col sm="2">
                 <b-dropdown id="ddown1" variant="light"  right text="" >
                   <b-dropdown-item :to="`/edit-post/${post.slug}`">Edit Post</b-dropdown-item>
-                  <b-dropdown-item>Second Action</b-dropdown-item>
+                  <b-dropdown-item @click="onDelete">Delete Post</b-dropdown-item>
                   <b-dropdown-item>Third Action</b-dropdown-item>
                 </b-dropdown>
             </b-col>
@@ -32,8 +32,6 @@
                 :target="`${post.id}`"
                 placement="top"
                  > 
-                  
-                   
                   <b-media 
                     @mouseover="show=true"
                     @mouseout="show=false"
@@ -66,7 +64,7 @@
 
 <script>
 import FollowButton from './FollowButton.vue';
-
+import {mapActions}from "vuex"
 export default {
     props:['post','canEdit'],
     components:{FollowButton},
@@ -74,6 +72,7 @@ export default {
       show: false
     }),
     methods:{
+        ...mapActions(['deletePost']),
         open(){
           this.$refs.pop.$emit('open')
         },
@@ -84,6 +83,12 @@ export default {
            }
           },400) 
         },
+        onDelete(){
+          if(confirm(`Are you sure you want to delete ${this.post.slug}? `))
+          {
+            this.deletePost(this.post.id)
+          }
+        }
     },created(){
      
      

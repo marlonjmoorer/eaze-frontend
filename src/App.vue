@@ -6,10 +6,9 @@
 </template>
 
 <script>
-import {mapActions,mapMutations} from "vuex"
+import {mapActions,mapMutations,mapGetters} from "vuex"
 import {Api} from "./Api"
 import NavBar from './components/NavBar.vue';
-import {mapGetters}from "vuex"
 export default {
   name: 'app',
   components:{NavBar},
@@ -28,8 +27,11 @@ export default {
   computed:{
     ...mapGetters(["loggedIn"])
   },
+  methods:{
+    ...mapActions(["checkToken"])
+  },
   created(){
-    console.log(this.$router)
+     this.checkToken()
   }
  
 }

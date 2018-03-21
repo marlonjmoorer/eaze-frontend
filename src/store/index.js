@@ -1,5 +1,6 @@
 import Vuex from 'vuex'
 import Vue from "vue"
+import jwtDecode from 'jwt-decode';
 import { Api } from '../Api';
 
 Vue.use(Vuex)
@@ -46,6 +47,18 @@ export const store= new Vuex.Store({
         }
         
     },actions:{
+        checkToken({state}){
+            if(state.token){
+                let jwt=jwtDecode(state.token)
+                console.log(jwt)
+                var current_time = Date.now() / 1000;
+                if ( jwt.exp < current_time) {
+                    Api.post("/refresh/",{token:state.token}).then(res=>{
+                        commit("LOGIN_SUCESS",res.data.token)
+                    })
+                }
+            }
+        },
         login({commit},form){
             return Api.post("/login/",form).then(res=>{
                 console.log(res.data)
@@ -75,6 +88,7 @@ export const store= new Vuex.Store({
             }
             return Api.post("/post/",form).then(res=>res.status)
         },
+       
         signup(context,data){
             return Api.post("/users/",data)
         },
@@ -95,19 +109,27 @@ export const store= new Vuex.Store({
             })
         },
         loadPostForAuthor({commit},handle){
-            return Api.get(`/author/${handle}/posts`).then(res=>{
+            return Api.get(`/profile/${handle}/posts`).then(res=>{
                 commit("SET_POSTS",res.data)
             })
         },
         followAuthor({commit,state},data){
-            Api.patch(`/author/${data.handle}/follow`,data).then(res=>{
-              //  commit("PROFILE_FETCHED",res.data)
-            }).then(()=>{
+            Api.patch(`/profile/${data.handle}/follow`,data).then(()=>{
                 return Api.get(`/users/${state.user.id}`).then(res=>{
                     commit("USER_FETCHED",res.data)
                 })
             })
         },
+        deletePost({state, dispatch},id){
+            Api.delete(`/post/${id}`).then((res)=>{
+                if(res.status==204){
+                    dispatch("loadProfile",state.profile.handle)
+                }else{
+                    console.log(res)
+                    throw new Error("Opps")
+                }
+            })
+        }
 
     }
 })

@@ -37,53 +37,7 @@
                     </b-button>
                   
                   </b-button-group>
-                    <b-popover target="tags"
-                    placement="bottom"
-                    title="Add Tags"
-                    triggers="click">
-
-                      <template slot="title">
-                        <b-btn  class="close" aria-label="Close">
-                          <span class="d-inline-block" aria-hidden="true">&times;</span>
-                        </b-btn>
-                        Tags
-                      </template>
-                      <div>
-                        <b-form-group  label-for="query"
-                                       class="mb-1"
-                                      description="Search for a tag">   
-                          <b-form-input  @keyup.native="searchTags()" id="query"  size="sm" v-model="query" />
-                        </b-form-group>
-                        <b-alert show class="small">
-                          <strong>Current Tags:</strong><br/>
-                            <b-badge href="#"  :key="i" class="mr-1" v-for="(tag,i) in addedTags" >
-                              {{tag.name}}
-                            </b-badge>
-                        </b-alert>
-                        
-                      </div>
-                    </b-popover>
-                    <b-popover
-                     target="query"
-                     triggers="focus"
-                      placement="bottom"
-                     > 
-                     <span v-if="results.length==0">
-                       Type something to start search
-                     </span>
-                     <template v-else>
-                       <b-list-group>
-                        <b-list-group-item
-                          href="#"
-                          @click="appendTag(tag)"
-                          v-for="(tag,i) in results"
-                          :key="i" >
-                          {{tag.name}}
-                         </b-list-group-item>
-                      </b-list-group>
-                     </template>
-
-                    </b-popover>
+                  <tag-search :target="'tags'" :addedTags="addedTags" />
                 </b-col>
             </b-row>
             <input type="file" v-show="false" ref="fileInput" @change="handleFileChange" accept="image/*"/>
@@ -122,11 +76,11 @@
 
 <script>
 import {mapActions,mapGetters,mapState} from 'vuex'
-import DeltaToHtml from 'quill-delta-to-html'
 import PostContent from './PostContent.vue';
+import TagSearch from './TagSearch.vue';
 
 export default {
-  components:{PostContent},
+  components:{PostContent,TagSearch},
   props:['slug'],
   data:()=>({
       title:"",
@@ -140,8 +94,6 @@ export default {
       },
       content:'',
       addedTags:[],
-      query:'',
-      //results:[],
       showPreview:false,
       existingImage:"",
       isDraft:true
@@ -161,7 +113,7 @@ export default {
     },
   },
   computed:{
-    ...mapState(["currentPost","user","tags"]),
+    ...mapState(["currentPost","user"]),
     previewUrl:function(){
       return this.image.url||(this.image.file?URL.createObjectURL(this.image.file):"");
     },
@@ -171,12 +123,10 @@ export default {
         body:this.content,
         posted:new Date(),
         image:this.previewUrl,
-        author:{"user":this.user.full_name}
+        author:{"user":this.user.full_name},
+        tags:this.addedTags
       }
     },
-    results:function(){
-      return this.tags&&this.query? this.tags.filter(tag=>tag.name.toLowerCase().includes(this.query)):[]
-    }
   },
   methods:{
      ...mapActions(['publishPost','getPost',"loadTagList"]),
@@ -190,12 +140,14 @@ export default {
          let form= new FormData()
          form.append("title",this.title) 
          form.append("body",this.content)
+         form.append("tags",JSON.stringify(this.addedTags))
          if(draft&&this.isDraft){
            form.append("draft",draft)
          }
          if(this.slug){
            form.append("slug",this.slug)
          }
+        
 
          this.prepareImages(form).then(this.publishPost).then(status=>{
            if(status==201){
@@ -229,18 +181,7 @@ export default {
          }
          return Promise.resolve(form)
     },
-    searchTags(){
-      console.log("object")
-      if(this.query){
-        this.loadTagList(this.query)
-      }
-    },
-    appendTag(tag){
-      const exist= this.addedTags.includes(tag)
-      if(!exist){
-        this.addedTags.push(tag)
-      }
-    }
+    
   },
   created(){
     if(this.slug){
@@ -254,6 +195,7 @@ export default {
             this.existingImage=this.image.url=this.currentPost.image
             this.image.external=true
           }
+          this.addedTags= this.currentPost.tags
        });
      })
     }

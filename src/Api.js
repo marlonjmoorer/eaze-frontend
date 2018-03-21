@@ -11,14 +11,14 @@ const Api= axios.create({
     },  
 })
 Api.interceptors.request.use(req=>{
-  console.log(req)
+  console.log('Fetching')
   return req
 },)
 Api.interceptors.response.use(null, function(err) {
 	if(err.response.status === 401) {
 		//localStorage.removeItem('token');
-		//store.commit("LOGOUT")
-    }
+	 //  store.commit("LOGOUT")
+  }
     console.warn('Error status', err.response.status);
     console.warn('Error status', err.response);
     return Promise.reject(err)

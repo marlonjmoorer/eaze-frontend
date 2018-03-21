@@ -1,5 +1,5 @@
 <template>
- <b-container>
+ <b-container v-if="profile.id">
    <b-row class="my-2">
      <b-col sm="4" class="py-5" >
         <b-img 
@@ -79,12 +79,12 @@
         <b-tab title="Drafts" v-if="canEdit" >
           <b-row class="mt-3" >
              <b-col :key="post.id" v-for="post in drafts"  sm="6" md="6"  >
-                <post-list-item :post="post" :hideFooter="true" />
+                <post-list-item :post="post" :canEdit="true" />
              </b-col>  
           </b-row>
         </b-tab>
         <b-tab title="Messages" v-if="canEdit" >
-          <br>Disabled tab!
+          Comming soon...
         </b-tab>
       </b-tabs>
      </b-col>

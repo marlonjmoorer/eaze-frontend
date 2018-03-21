@@ -15,6 +15,9 @@
     </b-row>
     <p v-html="post.body"></p>
     <hr/>
+    <h4 >
+        <b-badge class="mr-1" :key="i" v-for="(tag,i) in post.tags" >{{tag.name}}</b-badge> 
+    </h4>
 </div>
    
 </template>
