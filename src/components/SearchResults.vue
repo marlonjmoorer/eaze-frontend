@@ -1,5 +1,5 @@
 <template>
-  <b-button>Add Post</b-button>
+  
 </template>
 
 <script>

@@ -1,61 +1,94 @@
 <template>
   <div>
-     <b-card overlay
-          img-src="https://lorempixel.com/900/250/sports/6/"
-          img-alt="Card Image"
-          text-variant="white"
-          title="Image Overlay"
-          sub-title="Subtitle">
-    <p class="card-text">
-      Some quick example text to build on the card and make
-      up the bulk of the card's content.
-    </p>
-  </b-card>
+    <div class="banner" >
+        <div class="banner-logo">
+          <h1 class="logo text-white" >EAZE</h1>
+        </div>
+    </div>
     <b-container>
-      <b-row>
-        <b-col :key="p.id" v-for="p in posts"  sm="6">
-              <b-card   bg-variant="dark"
-                    :img-src="p.imageUrl||'http://via.placeholder.com/350x150'"
-                    img-alt="Image"
-                    img-top
-                    tag="article"
-                    text-variant="white"
-                    class="mb-2">
-                <p class="card-text">
-                  {{p.title}}
-                </p>                
-              <b-button href="#" :to="`/post/${p.id}`" variant="primary">Go somewhere</b-button>
+      <b-row >
+        <b-col sm="8">
+          <b-row>
+             <b-col :key="post.id" v-for="post in posts"  sm="12" md="12"  >
+                <post-list-item :post="post" />
+             </b-col>  
+          </b-row>
+        </b-col>
+        <b-col sm="4">
+             <b-card border-variant="info"
+            header="Categories"
+            header-bg-variant="info"
+            header-text-variant="white"
+            align="center">
+
+              <b-badge href="#" :key="i" class="mr-1" v-for="(tag,i) in tags" >
+                {{tag.name}}
+              </b-badge>
             </b-card>
-        </b-col>              
-      </b-row>   
+            
+        </b-col>
+                   
+      </b-row>
+      
     </b-container>
     
   </div>
-
-  
-
 
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
+import PostListItem from './PostListItem.vue';
+
 export default {
   data: () => ({}),
+  components:{PostListItem},
   computed: {
-    ...mapState(["posts"])
+    ...mapState(["posts","tags"])
   },
   methods: {
-    ...mapActions(["loadPostList"])
+    ...mapActions(["loadPostList","loadTagList"])
   },
   created() {
     this.loadPostList();
+    this.loadTagList()
   }
 };
 </script>
 
-<style>
-#banner{
+<style scoped>
+.banner{
   height: 35vh;
   width: 100%;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;               
+  background:linear-gradient(
+      #17a2b852, 
+      #17a2b852
+    ),
+     url('https://upload.wikimedia.org/wikipedia/commons/0/02/Moscow-City_%2836211143494%29.jpg')
+    no-repeat center;
+  background-size:cover;  
+}
+.banner .banner-logo{
+  background-color: #dc3545;
+  padding:10px 80px;
+}
+.banner-logo h1{
+font-size: 3.4em
+}
+img{
+  height: 35vh;
+  width: 100%;
+}
+.main-container{
+  background-color: white;
+  height: 100vh;
+  padding: 30px
+}
+.card-img{
+  height: 200px;
 }
 </style>

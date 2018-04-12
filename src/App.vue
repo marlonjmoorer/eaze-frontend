@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {mapActions,mapMutations} from "vuex"
+import {mapActions,mapMutations,mapGetters} from "vuex"
 import {Api} from "./Api"
 import NavBar from './components/NavBar.vue';
 export default {
@@ -17,6 +17,22 @@ export default {
       msg: 'Welcome to Your Vue.js App'
     }
   },
+  watch:{
+    loggedIn(val,oldVal){
+      if(oldVal&&!val){
+        this.$router.push("/")
+      }
+    }
+  },
+  computed:{
+    ...mapGetters(["loggedIn"])
+  },
+  methods:{
+    ...mapActions(["checkToken"])
+  },
+  created(){
+     this.checkToken()
+  }
  
 }
 </script>
@@ -26,6 +42,9 @@ export default {
 html,body{
   width: 100vw;
   height: 100%;
+}
+body{
+  /* background:#e0e0db */
 }
 
 </style>
