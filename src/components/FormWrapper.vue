@@ -45,8 +45,9 @@ export default {
 </script>
 
 <style scoped>
-.wrapper{
-        height: 75vh;
+    .wrapper{
+         background-color:gray;
+        height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -55,4 +56,5 @@ export default {
         width: 45%;
         
     }
+
 </style>

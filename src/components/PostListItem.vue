@@ -8,9 +8,9 @@
             <b-col>
               <b-media right-align  vertical-align="center">
               <b-img slot="aside" width="100" height="100"  :src="post.image||'http://via.placeholder.com/350x150'" />
-              <b-link router-tag='h2' class="align-middle" :to="`/post/${post.slug}`" >
-                  {{post.title}}
-              </b-link> 
+              <h2 class="align-middle"  >
+                  <nuxt-link :to="`/post/${post.slug}`">{{post.title}}</nuxt-link>
+              </h2> 
               <p class="body"  v-html="post.body"></p>
             </b-media>
             </b-col>
@@ -38,12 +38,13 @@
                     @mouseleave="close" slot="title" right-align  vertical-align="center">
                     <h5>{{post.author.user}}</h5>
                     <b-img slot="aside" width="55" height="55"  :src="post.image||'http://via.placeholder.com/350x150'" />
-                      <follow-button :profile="post.author"/>
+                      <!-- <follow-button :profile="post.author"/> -->
                   </b-media>
                   <p 
                     @mouseover="show=true"
                     @mouseout="show=false"
-                    @mouseleave="close" :to="`/post/${post.slug}`" >
+                    @mouseleave="close" 
+                    :to="`/post/${post.slug}`" >
                         {{post.author.about}}
                   </p> 
                    

@@ -141,12 +141,10 @@ export default {
     },
     watch:{
         profile(val){
-            console.log("watch")
             this.updatedProfile={...val}
         }
     },
     updated(){
-        console.log("updated")
         // this.updatedProfile={...this.profile}
     },
     created(){
