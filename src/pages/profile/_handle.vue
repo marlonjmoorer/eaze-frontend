@@ -43,11 +43,11 @@
                     triggers="hover focus">
                             Hi
                   </b-popover>
-                  <b-badge id="follow"  href="#" variant="primary">
+                  <b-badge id="follow" href="#" variant="primary">
                     <i class="fa fa-user"></i> Following <b-badge variant="light">{{profile.following.length}}</b-badge>
                   </b-badge>
                   <b-badge href="#" variant="dark">
-                    <i class="fa fa-newspaper"></i> Posts <b-badge variant="light">{{posts.length}}</b-badge>
+                    <i class="fa fa-newspaper"></i> Posts <b-badge variant="light">{{profile.posts.length}}</b-badge>
                   </b-badge>
                   <b-badge href="#" variant="dark">
                     <i class="fa fa-comments"></i> Comments<b-badge variant="light">4</b-badge>
@@ -101,18 +101,22 @@ import FollowButton from '@/components/FollowButton.vue';
 export default {
   props:['handle'],
   components:{EditProfile,PostListItem,FollowButton},
-  async fetch({store,params}){
-    console.log(params)
-    store.dispatch("loadProfile",params.handle)
+  async asyncData ({ store,params }) {
+    await store.dispatch("profile/loadProfile",params.handle)
+    const  profile=store.state.profile.details
+    await store.dispatch("articles/loadPostForAuthor",profile.handle)
+    return{ profile}
   },
   data:()=>({
-    currentUser:null
   }),
   computed:{
-    ...mapGetters(["authorsFollowing"]),
-    ...mapState(['profile','posts',"user"]),
+    ...mapGetters("profile",["authorsFollowing"]),
+    ...mapGetters("user",["userProfile"]),
+    ...mapState("articles",{
+      "posts":state=>state.postList
+    }),
     canEdit:function(){
-      return this.profile&&this.profile.handle==this.user.profile.handle
+      return this.profile&&this.profile.handle==this.userProfile.handle
     },
     publishedPost:function(){ return this.posts?this.posts.filter(p=>!p.draft):[]},
     drafts: function(){return this.posts?this.posts.filter(p=>p.draft):[]},
@@ -125,11 +129,13 @@ export default {
       this.loadProfile(this.handle)
     },
     profile(val){
-      this.loadPostForAuthor(val.handle)
-      this.$root.$emit('bv::hide::modal','profileModal')
+     // console.log("wacthing profile")
+     // this.loadPostForAuthor(val.handle)
+      //this.$root.$emit('bv::hide::modal','profileModal')
     }
   },
   created(){
+
     //this.loadProfile(this.handle)
   }
 

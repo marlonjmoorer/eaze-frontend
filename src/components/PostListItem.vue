@@ -18,7 +18,7 @@
           <b-row align-h="end" v-if="canEdit">
             <b-col sm="2">
                 <b-dropdown id="ddown1" variant="light"  right text="" >
-                  <b-dropdown-item :to="`/edit-post/${post.slug}`">Edit Post</b-dropdown-item>
+                  <b-dropdown-item :to="`/post/${post.slug}/edit`">Edit Post</b-dropdown-item>
                   <b-dropdown-item @click="onDelete">Delete Post</b-dropdown-item>
                   <b-dropdown-item>Third Action</b-dropdown-item>
                 </b-dropdown>

@@ -41,16 +41,18 @@ import PostListItem from '@/components/PostListItem.vue';
 
 export default {
   components:{PostListItem},
-
-  async fetch({store}){
-    await Promise.all([store.dispatch("loadPostList"),store.dispatch("loadTagList")])
+  async asyncData ({ store }) {
+    await Promise.all([store.dispatch("articles/loadPostList"),store.dispatch("articles/loadTagList")])
+  
+    const {tags,postList}= store.state.articles
+    console.log(postList)
+    return{tags,posts:postList}
   },
   methods: {
-    ...mapActions(["loadPostList","loadTagList"])
+    //...mapActions(["loadPostList","loadTagList"])
   },
-  created() {
-    this.tags=this.$store.state.tags
-    this.posts= this.$store.state.posts
+  created(){
+
   }
 };
 </script>

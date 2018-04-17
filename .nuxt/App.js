@@ -5,6 +5,12 @@ import '../node_modules/bootstrap/dist/css/bootstrap.css'
 
 import '../node_modules/bootstrap-vue/dist/bootstrap-vue.css'
 
+import '../node_modules/froala-editor/css/froala_editor.pkgd.min.css'
+
+import '../node_modules/froala-editor/css/froala_style.min.css'
+
+import '../node_modules/font-awesome/css/font-awesome.css'
+
 
 let layouts = {
 

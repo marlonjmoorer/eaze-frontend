@@ -2,13 +2,6 @@
 <template>
   <b-container fluid >
     <b-row>
-      <b-col v-show="showPreview">
-        <div class="mt-5">
-          <h3>Preview :</h3>
-          <post-content :post="previewPost"/>
-        </div>
-        
-      </b-col>
       <b-col>
         <b-card 
           class="mt-5"
@@ -23,7 +16,7 @@
                 <b-col  md="6">
                   <b-button-group>
                     <b-button 
-                        :pressed.sync="showPreview"
+                         @click="openPreview"
                           variant="outline-light"
                           ref="button">
                         Preveiw
@@ -35,34 +28,34 @@
                     </b-button>
                   
                   </b-button-group>
-                  <tag-search :target="'tags'" :addedTags="addedTags" />
+                  <tag-search :target="'tags'" :addedTags="post.addedTags" />
                 </b-col>
             </b-row>
             <input type="file" v-show="false" ref="fileInput" @change="handleFileChange" accept="image/*"/>
             <b-form-group >
-                <b-form-input :required='true' v-model="title" placeholder="Title" ></b-form-input>
+                <b-form-input :required='true' v-model="post.title" placeholder="Title" ></b-form-input>
             </b-form-group>
             <b-dropdown id="ddown1" text="Add" dropup  class="m-md-2">
               <b-dropdown-item @click="getFile"> 
                 <i class="fas fa-image"></i> Image File
               </b-dropdown-item>
-              <b-dropdown-item @click="image.external=true"> 
+              <b-dropdown-item @click="post.image.external=true"> 
                 <i class="fas fa-link"></i> Image Url
               </b-dropdown-item>
             </b-dropdown>
-            <b-form-group v-if="image.external">
-              <b-form-input placeholder="Url" v-model="image.url" />
+            <b-form-group v-if="post.image.external">
+              <b-form-input placeholder="Url" v-model="post.image.url" />
             </b-form-group>
-              <span v-if="image.file" variant="primary">
-                {{image.file.name}} <b-badge href="#" @click="image.file=null" variant="danger">X</b-badge>
+              <span v-if="post.image.file" variant="primary">
+                {{post.image.file.name}} <b-badge href="#" @click="post.image.file=null" variant="danger">X</b-badge>
               </span>
              
               <b-form-group label="Body" >
-                  <vue-html-editor name="html-editor" ></vue-html-editor>
+                  <froala :tag="'textarea'" v-model="post.body"></froala>
                   <!-- <vue-html5-editor :content="content" @change="updateContent" :height="500"></vue-html5-editor> -->
               </b-form-group> 
               <b-button @click="submit(false)" variant="success">Publish</b-button>
-              <b-button v-if="isDraft" @click="submit(true)" variant="info">Save as Draft</b-button>
+              <b-button v-if="post.isDraft" @click="submit(true)" variant="info">Save as Draft</b-button>
                
             
           </b-card>
@@ -77,67 +70,47 @@
 import {mapActions,mapGetters,mapState} from 'vuex'
 import PostContent from '@/components/PostContent.vue';
 import TagSearch from '@/components/TagSearch.vue';
+import defaultVue from '../../../layouts/default.vue';
 
 export default {
   components:{PostContent,TagSearch},
-  props:['slug'],
   async asyncData ({ params,store }) {
-     if(params.slug){
-        await  store.dispatch("getPost",params.slug)
-        const {currentPost}= store.state
 
-       const data={
-          title:currentPost.title,
-          content:currentPost.body,
-          isDraft:currentPost.draft,
-          addedTags:currentPost.tags,
-          image:{
-            url:"",
-            file:null,
-            external:false
-          },
-          showPreview:false,
-        }
-        if(currentPost.image){
-            data.existingImage=data.image.url=currentPost.image
-            data.image.external=true
-        }
-        return data
-        
-    //       this.content=this.currentPost.body
-    //       this.isDraft= this.currentPost.draft
-    //       if(this.currentPost.image){
-    //         this.existingImage=this.image.url=this.currentPost.image
-    //         this.image.external=true
-    //       }
-    //       this.addedTags= this.currentPost.tags
-       
-     }
-     return{
+    let defaultPost={
         title:"",
         image:{
           url:"",
           file:null,
           external:false
         },
-        config:{
-          placeholder: 'Body',
-        },
-        content:'',
+        body:'',
         addedTags:[],
-        showPreview:false,
         existingImage:"",
-        isDraft:true
+        isDraft:true,
+        posted:new Date(),
+        
+        author:{user:"none"}
       }
+
+     if(params.slug&&params.slug!="new"){
+        await  store.dispatch("articles/getPost",params.slug)
+        const {currentPost}= store.state.articles
+        defaultPost.title=currentPost.title,
+        defaultPost.body=currentPost.body,
+        defaultPost.isDraft=currentPost.draft,
+        defaultPost.addedTags=currentPost.tags
+        defaultPost.author=currentPost.author
+        defaultPost.posted= currentPost.posted
+        defaultPost.slug=params.slug
+        if(currentPost.image){
+             defaultPost.existingImage=defaultPost.image.url=currentPost.image
+             defaultPost.image.external=true
+        }
+       
+     }
+     return {post:defaultPost, previewWindow:null}
     
   },
-  async fetch({store,params}){
-       //console.log(params)
-       //await  store.dispatch("getPost",params.slug)
-   
-   
-  },
-  //data:()=>({}),
   watch:{
     image:{
       handler: function (val, oldVal) { 
@@ -151,6 +124,13 @@ export default {
       },
       deep: true
     },
+    post:{
+      handler:function(val, prev){
+          console.log(val,prev)
+          this.$store.commit("articles/UPDATE_PREVEIW",val)
+      },
+      deep: true
+    }
   },
   computed:{
     ...mapState(["currentPost","user"]),
@@ -163,29 +143,27 @@ export default {
         body:this.content,
         posted:new Date(),
         image:this.previewUrl,
-        author:{"user":this.user.full_name},
+        author:{"user":"ME"},
         tags:this.addedTags
       }
     },
   },
   methods:{
-     ...mapActions(['publishPost','getPost',"loadTagList"]),
-     updateContent(html){
-       this.content=html
-     },
-     submit(draft){
+     ...mapActions("articles",['publishPost','getPost',"loadTagList"]),
+     submit(saveAsDraft){
 
-       if(this.title&& this.content){
+       const {title,body,isDraft,addedTags,slug}=this.post
+       if(title&& body){
          console.log(this)
          let form= new FormData()
-         form.append("title",this.title) 
-         form.append("body",this.content)
-         form.append("tags",JSON.stringify(this.addedTags))
-         if(draft&&this.isDraft){
-           form.append("draft",draft)
+         form.append("title",title) 
+         form.append("body",body)
+         form.append("tags",JSON.stringify(addedTags))
+         if(saveAsDraft&&isDraft){
+           form.append("draft",saveAsDraft)
          }
-         if(this.slug){
-           form.append("slug",this.slug)
+         if(slug){
+           form.append("slug",slug)
          }
         
 
@@ -194,7 +172,7 @@ export default {
              this.$router.push('/') 
            }
            if(status==200){
-             this.$router.push(`/post/${this.slug}`)
+             this.$router.push(`/post/${slug}`)
            }
          })
        } 
@@ -208,37 +186,39 @@ export default {
        this.image.file=e.target.files[0]
      },
      prepareImages(form){
-         if(this.image.file){
+         if(this.post.image.file){
            form.set("image",this.image.file)
-         }else if(this.image.url&&this.existingImage!=this.image.url)
+         }else if(this.post.image.url&&this.post.existingImage!=this.post.image.url)
          {
             return fetch(this.image.url).then(res=>res.blob()).then(blob=>{
                     console.log(blob)
-                    var file = new File([blob],`${this.title}.${blob.type.split("/")[1]}`);
+                    var file = new File([blob],`${this.post.title}.${blob.type.split("/")[1]}`);
                     form.set("image",file)
                     return form
             })
          }
          return Promise.resolve(form)
     },
+    openPreview(){
+      if(!this.previewWindow){
+        
+        var previewWindow=window.open(`/post/${this.post.slug}/preview`,'','height=1000,width=750')
+        previewWindow.onbeforeunload=()=>{
+          this.previewWindow=null
+          previewWindow.onload=null
+          previewWindow.onbeforeunload=null
+        }
+        previewWindow.onload=()=>{
+          this.$store.commit("articles/UPDATE_PREVEIW",this.post)
+        }
+        this.previewWindow=previewWindow
+      }
+    }
     
   },
   created(){
-    // if(this.slug){
-    //  this.getPost(this.slug).then(()=>{
-    //    this.$nextTick(() => {
-    //       console.log (this.currentPost)
-    //       this.title=this.currentPost.title
-    //       this.content=this.currentPost.body
-    //       this.isDraft= this.currentPost.draft
-    //       if(this.currentPost.image){
-    //         this.existingImage=this.image.url=this.currentPost.image
-    //         this.image.external=true
-    //       }
-    //       this.addedTags= this.currentPost.tags
-    //    });
-    //  })
-    //}
+   
+    
   }
 }
 </script>

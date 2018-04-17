@@ -14,6 +14,7 @@ import { createStore } from './store.js'
 /* Plugins */
 import nuxt_plugin_storage_8a363cdc from 'nuxt_plugin_storage_8a363cdc' // Source: ../src/plugins/storage.js (ssr: false)
 import nuxt_plugin_vendor_2f1618f9 from 'nuxt_plugin_vendor_2f1618f9' // Source: ../src/plugins/vendor.js (ssr: false)
+import nuxt_plugin_api_785206da from 'nuxt_plugin_api_785206da' // Source: ../src/plugins/api.js
 
 
 // Component: <no-ssr>
@@ -152,6 +153,7 @@ async function createApp (ssrContext) {
 
   // Plugin execution
   
+  if (typeof nuxt_plugin_api_785206da === 'function') await nuxt_plugin_api_785206da(app.context, inject)
   
   if (process.browser) { 
     if (typeof nuxt_plugin_storage_8a363cdc === 'function') await nuxt_plugin_storage_8a363cdc(app.context, inject)

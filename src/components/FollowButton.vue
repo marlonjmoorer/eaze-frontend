@@ -3,8 +3,7 @@
         <b-button   variant="outline-info" @click="follow()" :pressed="following" >
         {{following?"Following":"Follow"}}
         </b-button>
-    </div>
-    
+    </div>  
 </template>
 
 <script>
@@ -15,12 +14,17 @@ export default {
         loading:false
     }),
     computed:{
-        ...mapState(['posts',"user"]),
+        //...mapState(['posts',"user"]),
+        ...mapGetters("user",{
+            user:"userProfile"
+        }),
+        ...mapGetters("profile",["authorsFollowing"]),
         following:function(){
-            return this.user.profile.following.includes(this.profile.id)
+            return  this.user? this.user.following.includes(this.profile.id):false
         },
         visible:function(){
-            return this.profile&&this.profile.handle!=this.user.profile.handle
+            console.log(this.$store.state.user.userInfo)
+            return this.profile&&this.profile.handle!=this.user.handle
         }
     },
     methods:{
@@ -30,9 +34,6 @@ export default {
                 handle:this.profile.handle,
                 add:!this.following,
                 id:this.profile.id
-            }).then(()=>{
-               
-               
             })
         }
     }

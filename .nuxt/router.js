@@ -4,8 +4,10 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const _3f382a26 = () => import('../src/pages/signin.vue' /* webpackChunkName: "pages/signin" */).then(m => m.default || m)
-const _32da2d42 = () => import('../src/pages/post/_slug.vue' /* webpackChunkName: "pages/post/_slug" */).then(m => m.default || m)
+const _723caca2 = () => import('../src/pages/post/_slug/index.vue' /* webpackChunkName: "pages/post/_slug/index" */).then(m => m.default || m)
 const _4a0a738d = () => import('../src/pages/profile/_handle.vue' /* webpackChunkName: "pages/profile/_handle" */).then(m => m.default || m)
+const _77ae4e98 = () => import('../src/pages/post/_slug/preview.vue' /* webpackChunkName: "pages/post/_slug/preview" */).then(m => m.default || m)
+const _4f734b2c = () => import('../src/pages/post/_slug/edit.vue' /* webpackChunkName: "pages/post/_slug/edit" */).then(m => m.default || m)
 const _158dabfe = () => import('../src/pages/index.vue' /* webpackChunkName: "pages/index" */).then(m => m.default || m)
 
 
@@ -73,13 +75,23 @@ export function createRouter () {
 		},
 		{
 			path: "/post/:slug?",
-			component: _32da2d42,
+			component: _723caca2,
 			name: "post-slug"
 		},
 		{
 			path: "/profile/:handle?",
 			component: _4a0a738d,
 			name: "profile-handle"
+		},
+		{
+			path: "/post/:slug?/preview",
+			component: _77ae4e98,
+			name: "post-slug-preview"
+		},
+		{
+			path: "/post/:slug?/edit",
+			component: _4f734b2c,
+			name: "post-slug-edit"
 		},
 		{
 			path: "/",
