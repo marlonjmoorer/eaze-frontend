@@ -102,7 +102,7 @@ export default {
         },
     },
     methods:{
-        ...mapActions(["updateProfile"]),
+        ...mapActions("profile",["updateProfile"]),
         addLink(type){
             if(type.delete){
                 type.delete=false
@@ -133,7 +133,7 @@ export default {
             }
 
             this.updateProfile(form).then(res=>{
-
+                
             })
 
         }
@@ -141,19 +141,9 @@ export default {
     },
     watch:{
         profile(val){
-            console.log("watch")
             this.updatedProfile={...val}
         }
     },
-    updated(){
-        console.log("updated")
-        // this.updatedProfile={...this.profile}
-    },
-    created(){
-        //this.updatedProfile=this.profile
-       // console.log(this)
-    }
-
 
 }
 </script>

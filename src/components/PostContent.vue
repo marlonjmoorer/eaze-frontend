@@ -2,14 +2,14 @@
 <div>
     <h1 class="mt-4">{{post.title}}</h1>
     <p class="lead">
-        by <a href="#">{{post.author.user}}</a>
+        by <nuxt-link :to="`/profile/${post.author.handle}`">{{post.author.user}}</nuxt-link> 
     </p>
     <hr/>
         {{dateString}}
     <hr/>
     <b-row v-if="post.image" >
         <b-col class="banner">
-                <b-img :src="post.image" fluid alt="Responsive image"  />
+                <b-img :src="(post.image.url||post.image)" fluid alt="Responsive image"  />
         </b-col>
         <hr/>
     </b-row>
