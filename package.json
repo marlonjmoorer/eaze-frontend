@@ -7,11 +7,12 @@
   "private": true,
   "scripts": {
     "devOld": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "buildOld": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "start": "node server.js",
     "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build",
     "dev": "nuxt",
-    "gen": "nuxt generate"
+    "gen": "nuxt generate",
+    "build":"nuxt build"
   },
   "dependencies": {
     "axios": "^0.18.0",

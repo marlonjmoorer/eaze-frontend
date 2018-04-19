@@ -37,8 +37,8 @@
                     @mouseout="show=false"
                     @mouseleave="close" slot="title" right-align  vertical-align="center">
                     <h5>{{post.author.user}}</h5>
-                    <b-img slot="aside" width="55" height="55"  :src="post.image||'http://via.placeholder.com/350x150'" />
-                      <!-- <follow-button :profile="post.author"/> -->
+                    <b-img slot="aside" width="55" height="55"  :src="post.author.photo||'http://via.placeholder.com/350x150'" />
+                    <follow-button :profile="post.author"/>
                   </b-media>
                   <p 
                     @mouseover="show=true"
@@ -98,9 +98,7 @@ export default {
 </script>
 
 <style>
-article{
-  
-}
+
 .frame{
      height: 150px !important;
 }

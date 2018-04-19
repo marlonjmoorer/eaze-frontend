@@ -16,9 +16,17 @@ export const mutations={
         },
         USER_FETCHED(state, userInfo) {
             state.userInfo = userInfo
+          
         },
 }
 export const actions={
+
+    tokenLogin({state,commit}){
+        this.$api.post("/exchange/",{token: state.token})
+        .then(res=>{
+            commit("USER_FETCHED", res.data.user)
+        })
+    },
     checkToken({state}) {
         if (state.token) {
             let jwt = jwtDecode(state.token)

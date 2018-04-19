@@ -9,14 +9,15 @@ export const actions={
              if(req){
                 let {eaze} = cookie.parse(req.headers.cookie)
                 let state =JSON.parse(eaze)
-                console.log(state)
+              
                 if(state.user){
                     const {token}=state.user
-                    store.commit("user/LOGIN_SUCESS", token)
-                   this.$api.defaults.headers={
-                       "Authorization":`JWT ${token}`,
-                       'Content-Type': 'application/json'
-                   }
+                  
+                    this.$api.defaults.headers={
+                        "Authorization":`JWT ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                    await store.commit("user/LOGIN_SUCESS", token)
                 } 
              }
          } catch (e) {

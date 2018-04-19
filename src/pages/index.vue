@@ -59,7 +59,7 @@ export default {
 
 <style scoped>
 .banner{
-  height: 35vh;
+  height: 200px;
   width: 100%;
   margin-bottom: 25px;
   display: flex;
@@ -68,9 +68,9 @@ export default {
   background:linear-gradient(
       #17a2b852, 
       #17a2b852
-    ),
-     url('https://upload.wikimedia.org/wikipedia/commons/0/02/Moscow-City_%2836211143494%29.jpg')
-    no-repeat center;
+    );
+     /* url('~/assets/city.jpg') center
+    no-repeat; */
   background-size:cover;  
 }
 .banner .banner-logo{

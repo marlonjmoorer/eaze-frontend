@@ -1,5 +1,5 @@
 <template>
- <b-container>
+ <b-container class="page">
      <b-row>
          <b-col md="8" sm="12">
             <post-content v-if="post" :post="post"/>
@@ -61,5 +61,8 @@ img{
 }
 body{
     background: white
+}
+.container{
+      background: white 
 }
 </style>

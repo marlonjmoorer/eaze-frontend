@@ -2,6 +2,7 @@ const webpack = require('webpack')
 
 module.exports = {
     srcDir: 'src/',
+    buildDir: 'dist',
     plugins: [
         {src:'~/plugins/storage.js',ssr:false},
         {src:'~/plugins/vendor.js',ssr:false},
@@ -14,6 +15,7 @@ module.exports = {
         'froala-editor/css/froala_editor.pkgd.min.css',
         'froala-editor/css/froala_style.min.css',
         'font-awesome/css/font-awesome.css'
+       
     ],
     build:{
         extend (config, { isClient }) {

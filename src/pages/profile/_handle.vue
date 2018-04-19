@@ -1,7 +1,7 @@
 <template>
  <b-container v-if="profile.id">
    <b-row class="my-2">
-     <b-col sm="4" class="py-5" >
+     <b-col sm="4" class="py-5 text-center" >
         <b-img 
         rounded="circle" 
         thumbnail 
@@ -12,14 +12,14 @@
      <b-col sm="8">
             <div class="py-5">
             <b-row>
-              <b-col>
+              <b-col  >
                 <h4 class="my-3" >{{profile.user}}</h4>
               </b-col>
               <b-col v-if="canEdit&&profile.handle" >
                 <b-button v-b-modal.profileModal variant="info" >
                   Update Profile
                 </b-button>
-                <b-modal id="profileModal" size="lg" title="Bootstrap-Vue">
+                <b-modal id="profileModal" size="lg" title="Profile">
                    <edit-profile :profile="profile"/>
                    <div slot="modal-footer"></div>
                 </b-modal>
@@ -102,10 +102,11 @@ export default {
   props:['handle'],
   components:{EditProfile,PostListItem,FollowButton},
   async asyncData ({ store,params }) {
+    store.dispatch("user/tokenLogin")
     await store.dispatch("profile/loadProfile",params.handle)
     const  profile=store.state.profile.details
     await store.dispatch("articles/loadPostForAuthor",profile.handle)
-    return{ profile}
+    return{}
   },
   data:()=>({
   }),
@@ -114,6 +115,9 @@ export default {
     ...mapGetters("user",["userProfile"]),
     ...mapState("articles",{
       "posts":state=>state.postList
+    }),
+    ...mapState("profile",{
+      "profile":state=> state.details
     }),
     canEdit:function(){
       return this.profile&&this.profile.handle==this.userProfile.handle
@@ -128,15 +132,12 @@ export default {
     handle(handle){
       this.loadProfile(this.handle)
     },
-    profile(val){
-     // console.log("wacthing profile")
-     // this.loadPostForAuthor(val.handle)
-      //this.$root.$emit('bv::hide::modal','profileModal')
-    }
+
   },
   created(){
-
-    //this.loadProfile(this.handle)
+    this.$store.watch(state=>state.profile.details,details=>{
+      this.$root.$emit('bv::hide::modal','profileModal')
+    })
   }
 
 }
@@ -146,5 +147,8 @@ export default {
 img.avi{
   height: 150px;
   width: 150px;
+}
+.container{
+      background: white
 }
 </style>

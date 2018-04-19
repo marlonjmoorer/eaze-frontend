@@ -15,16 +15,14 @@ export default {
     }),
     computed:{
         //...mapState(['posts',"user"]),
-        ...mapGetters("user",{
-            user:"userProfile"
-        }),
+        ...mapGetters("user",["userProfile"]),
         ...mapGetters("profile",["authorsFollowing"]),
         following:function(){
-            return  this.user? this.user.following.includes(this.profile.id):false
+            return  this.userProfile? this.userProfile.following.includes(this.profile.id):false
         },
         visible:function(){
             console.log(this.$store.state.user.userInfo)
-            return this.profile&&this.profile.handle!=this.user.handle
+            return this.profile&&this.profile.handle!=this.userProfile.handle
         }
     },
     methods:{
