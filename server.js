@@ -19,5 +19,7 @@ if (config.dev) {
 }
 
 app.use(nuxt.render)
-app.listen(port,host,()=>
-console.log('Server is listening on http://localhost:5000'))
+app.listen(port,host,()=>{
+  console.log(process.env)
+  console.log(`Server is listening on http://${host}:${port}`)
+})
