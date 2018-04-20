@@ -1,7 +1,7 @@
 import axios from 'axios'
 export default ({store},inject)=>{
     const api = axios.create({
-        baseURL: "http://localhost:8000",
+        baseURL: process.env.baseUrl
     })
       
     api.interceptors.request.use(req => {
