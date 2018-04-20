@@ -6,8 +6,7 @@ module.exports = {
     plugins: [
         {src:'~/plugins/storage.js',ssr:false},
         {src:'~/plugins/vendor.js',ssr:false},
-        {src:'~/plugins/api.js'},
-        //{src:'froala-editor/js/froala_editor.pkgd.min.js',ssr:false},
+        {src:'~/plugins/api.js'}
     ],
     css: [
         'bootstrap/dist/css/bootstrap.css',

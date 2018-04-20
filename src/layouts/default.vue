@@ -2,7 +2,6 @@
 <div>
     <nav-bar/>
     <nuxt/>
-    <script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 </div>
   
 </template>
