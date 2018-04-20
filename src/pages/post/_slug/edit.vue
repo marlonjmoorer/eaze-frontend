@@ -51,7 +51,10 @@
               </span>
              
               <b-form-group label="Body" >
-                  <froala :tag="'textarea'" v-model="post.body"></froala>
+                <vue-rich-editor
+                    id='editor'
+                    v-model='post.body' />
+                  <!-- <froala :tag="'textarea'" v-model="post.body"></froala> -->
                   <!-- <vue-html5-editor :content="content" @change="updateContent" :height="500"></vue-html5-editor> -->
               </b-form-group> 
               <b-button @click="submit(false)" variant="success">Publish</b-button>
@@ -70,7 +73,7 @@
 import {mapActions,mapGetters,mapState} from 'vuex'
 import PostContent from '@/components/PostContent.vue';
 import TagSearch from '@/components/TagSearch.vue';
-import defaultVue from '../../../layouts/default.vue';
+
 
 export default {
   components:{PostContent,TagSearch},
