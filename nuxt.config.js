@@ -7,7 +7,8 @@ module.exports = {
         {src:'~/plugins/storage.js',ssr:false},
         {src:'~/plugins/vendor.js',ssr:false},
         {src:'~/plugins/bootstrap.js'},
-        {src:'~/plugins/api.js'}
+        {src:'~/plugins/api.js'},
+        {src:'~/plugins/authGuard.js'}
     ],
     css: [
         'bootstrap/dist/css/bootstrap.css',
@@ -19,7 +20,6 @@ module.exports = {
     ],
     build:{
         extend (config, { isClient,isServer }) {
-            // Extend only webpack config for client-bundle
             if (isClient) {
                config.resolve.alias['vue'] = 'vue/dist/vue.common'
                config.plugins.push(
@@ -32,9 +32,7 @@ module.exports = {
                 config.externals = [
                   nodeExternals({
                     whitelist: [
-                      //  /^vue/,
                         /^bootstrap-vue/,
-                      
                     ]
                   })
                 ]
@@ -43,6 +41,14 @@ module.exports = {
     },
     env: {
         baseUrl: process.env.BASE_URL || 'http://localhost:8000'
+    },
+    router: {
+        middleware: 'auth'
+    },
+    mode:"spa",
+    loading: {
+        color: 'blue',
+        height: '5px'
     }
     // render: {
     //     bundleRenderer: {

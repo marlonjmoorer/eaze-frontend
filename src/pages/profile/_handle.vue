@@ -100,6 +100,7 @@ import FollowButton from '@/components/FollowButton.vue';
 
 export default {
   props:['handle'],
+  middleware:'auth',
   components:{EditProfile,PostListItem,FollowButton},
   async asyncData ({ store,params }) {
     store.dispatch("user/tokenLogin")
@@ -108,8 +109,6 @@ export default {
     await store.dispatch("articles/loadPostForAuthor",profile.handle)
     return{}
   },
-  data:()=>({
-  }),
   computed:{
     ...mapGetters("profile",["authorsFollowing"]),
     ...mapGetters("user",["userProfile"]),

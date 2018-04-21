@@ -15,13 +15,12 @@ config.dev = !(process.env.NODE_ENV === 'production')
 
 const nuxt = new Nuxt(config)
 
-if (config.dev) {
-  const builder = new Builder(nuxt)
-  builder.build()
-}
 
 app.use(nuxt.render)
-app.listen(port,()=>{
+app.listen(port,async()=>{
 
+  if (config.dev) {
+   await new Builder(nuxt).build()
+  }
   console.log(`Server is listening on http://${host}:${port}`)
 })

@@ -44,9 +44,7 @@ export default {
   components:{PostListItem},
   async asyncData ({ store }) {
     await Promise.all([store.dispatch("articles/loadPostList"),store.dispatch("articles/loadTagList")])
-  
     const {tags,postList}= store.state.articles
-    console.log(postList)
     return{tags,posts:postList}
   },
   methods: {
