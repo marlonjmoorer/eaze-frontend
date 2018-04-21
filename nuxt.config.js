@@ -1,13 +1,14 @@
 const webpack = require('webpack')
-
+const nodeExternals = require('webpack-node-externals')
 module.exports = {
     srcDir: 'src/',
     buildDir: 'dist',
     plugins: [
         {src:'~/plugins/storage.js',ssr:false},
         {src:'~/plugins/vendor.js',ssr:false},
+        {src:'~/plugins/bootstrap.js'},
         {src:'~/plugins/api.js'},
-        //{src:'froala-editor/js/froala_editor.pkgd.min.js',ssr:false},
+        {src:'~/plugins/authGuard.js'}
     ],
     css: [
         'bootstrap/dist/css/bootstrap.css',
@@ -18,8 +19,7 @@ module.exports = {
        
     ],
     build:{
-        extend (config, { isClient }) {
-            // Extend only webpack config for client-bundle
+        extend (config, { isClient,isServer }) {
             if (isClient) {
                config.resolve.alias['vue'] = 'vue/dist/vue.common'
                config.plugins.push(
@@ -28,7 +28,27 @@ module.exports = {
                   jQuery: "jquery"
                 }))
             }
+            if (isServer) {
+                config.externals = [
+                  nodeExternals({
+                    whitelist: [
+                        /^bootstrap-vue/,
+                    ]
+                  })
+                ]
+              }
         }
+    },
+    env: {
+        baseUrl: process.env.BASE_URL || 'http://localhost:8000'
+    },
+    router: {
+        middleware: 'auth'
+    },
+    mode:"spa",
+    loading: {
+        color: 'blue',
+        height: '5px'
     }
     // render: {
     //     bundleRenderer: {

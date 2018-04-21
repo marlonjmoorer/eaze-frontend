@@ -1,12 +1,12 @@
 import axios from 'axios'
 export default ({store},inject)=>{
     const api = axios.create({
-        baseURL: "http://localhost:8000",
+        baseURL: process.env.baseUrl
     })
       
     api.interceptors.request.use(req => {
         console.log('Fetching: ',req.url)
-        console.log(req.headers)
+        
         if(!req.headers.Authorization&& store.state.user.token){
             console.log("Adding token")
             let {token}= store.state.user
@@ -28,7 +28,6 @@ export default ({store},inject)=>{
         return  Promise.resolve('')
     });
     store.watch(state=>state.user.token, token=> {
-        console.log("watch",token)
         if (token){
              api.defaults.headers={
                  "Authorization":`JWT ${token}`,

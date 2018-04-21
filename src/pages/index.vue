@@ -5,6 +5,7 @@
           <h1 class="logo text-white" >EAZE</h1>
         </div>
     </div>
+   
     <b-container>
       <b-row >
         <b-col sm="8">
@@ -30,7 +31,7 @@
       </b-row>
       
     </b-container>
-    
+ 
   </div>
 
 </template>
@@ -43,9 +44,7 @@ export default {
   components:{PostListItem},
   async asyncData ({ store }) {
     await Promise.all([store.dispatch("articles/loadPostList"),store.dispatch("articles/loadTagList")])
-  
     const {tags,postList}= store.state.articles
-    console.log(postList)
     return{tags,posts:postList}
   },
   methods: {

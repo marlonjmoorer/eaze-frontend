@@ -2,7 +2,7 @@
 <div>
     <nav-bar/>
     <nuxt/>
-    <script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+  
 </div>
   
 </template>
@@ -11,6 +11,14 @@
 import NavBar from '@/components/NavBar.vue';
 export default {
     components:{NavBar},
+    head:{
+        script: [
+            { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' }, 
+           { src: 'https://cdnjs.cloudflare.com/ajax/libs/froala-editor/2.8.0/js/froala_editor.pkgd.min.js' },
+           { src: 'https://use.fontawesome.com/releases/v5.0.6/js/all.js' }
+        ],
+     
+    }
 }
 
 </script>
