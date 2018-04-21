@@ -1,5 +1,5 @@
 <template>
-<no-ssr>
+
   <b-navbar toggleable="md" type="dark" variant="info">
 
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
@@ -53,7 +53,7 @@
 
       </b-collapse>
   </b-navbar>
-  </no-ssr>
+
 </template>
 
 <script>
