@@ -5,6 +5,7 @@
           <h1 class="logo text-white" >EAZE</h1>
         </div>
     </div>
+    <no-ssr>
     <b-container>
       <b-row >
         <b-col sm="8">
@@ -30,7 +31,7 @@
       </b-row>
       
     </b-container>
-    
+    </no-ssr>
   </div>
 
 </template>

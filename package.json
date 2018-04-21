@@ -35,7 +35,8 @@
     "vuex": "^3.0.1",
     "vuex-persist": "^1.1.6",
     "vuex-persistedstate": "^2.5.2",
-    "vuex-shared-mutations": "0.0.3"
+    "vuex-shared-mutations": "0.0.3",
+    "webpack-node-externals": "^1.7.2"
   },
   "browserslist": [
     "> 1%",
