@@ -1,59 +1,45 @@
 <template>
-    <form @submit.prevent="onSubmit">
-      <!-- <b-row>
-          <b-col>
-              <div v-if="errors" class="text-danger">
-                    {{errorsFor("non_field_errors")[0]}}
-                </div>
-          </b-col>
-      </b-row> -->
-      
-                <b-form-group >
-                    <b-form-input
-                        type="email"
-                        placeholder="Email"
-                        
-                        v-model="email"
-                        :state="validField('email')"
-                    />
-                    <div v-if="!email" class="invalid-feedback">
-                       Email is required.
-                    </div>
-                    
-                    <div v-if="errors" class="invalid-feedback">
-                            {{errorsFor("email")[0]}}
-                    </div>
-                </b-form-group>
 
-
-                <b-form-group >
-                    <b-form-input
-                        placeholder="Password"
-                        v-model="password"
-                        
-                        type="password"
-                        :state="validField('password')"
-                    />
-                    <div v-if="!password" class="invalid-feedback">
-                       Passwod is required.
-                    </div>
-                    <div v-if="errors" class="invalid-feedback">
-                            {{errorsFor("password")[0]}}
-                    </div>
-                    
-                </b-form-group>        
+    <form id ="signinForm" @submit.prevent="onSubmit">
+        <b-alert :show="!!(errors)" dismissible variant="danger">
+            <span v-for="err in errors" :key="err">
+                {{err}}
+            </span>
+        </b-alert>
+     
+        <form-field
+            type="email"
+            placeholder="Email"
+            :model.sync="email"
+            :validation="$v.email"/>
+        <form-field
+            type="password"
+            placeholder="Password"
+            :model.sync="password"
+            :validation="$v.password"/>         
         <b-button type="submit" variant="info">Signin</b-button>
-</form>
-  
-
+    </form>
 </template>
 
 <script>
 import {mapActions,mapGetters} from 'vuex'
-import FormWrapper from '@/components/FormWrapper.vue'
+import { required, minLength, email } from "vuelidate/lib/validators"
+import FormField from './FormField.vue';
+
 export default {
-    extends:{...FormWrapper},
+    components:{FormField},
+    validations:{
+        email: {
+            required,
+            email
+        },
+        password: {
+            required,
+            minLength: minLength(8)   
+        }
+    },
     data:()=>({
+        errors:null,
         email: '',
         password: '',
     }),
@@ -62,22 +48,22 @@ export default {
     },
     methods:{
         ...mapActions("user",['login']),
-
         onSubmit(){
-            
-            let {email ,password}=this
-            if(email&&password){
+            if(!this.$v.$invalid){
+                let {email ,password}=this
                 let data={
                     email,
                     password
                 }
+                this.errors=null
                 this.login(data).then(()=>{
                     if(this.loggedIn){
                         this.$router.push('/') 
                     }
                 }).catch(err=>{
-                        if(err.response.data){
-                            this.errors=err.response.data
+                        if(err.response){
+                            let{ non_field_errors}=err.response.data
+                            this.errors=non_field_errors
                         }
                 })  
             }
@@ -85,12 +71,14 @@ export default {
         }
     },
     created(){
+        console.log(email)
         
     }
+
     
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

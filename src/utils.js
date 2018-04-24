@@ -13,11 +13,26 @@ const checkAuth=(loggedIn,url)=>{
            /^\/signup/,
        ]
    }
-   var r= cases.reduce((redirect,reg)=>{
+   return cases.reduce((redirect,reg)=>{
        console.log(url,"matches :", (reg.test(url)||redirect))
        return reg.test(url)||redirect
    },false) 
-   console.log(r)
-   return r
 }
-export {checkAuth}
+//Validate helpers
+const errorMessages={
+    email:"Must be valid email",
+    required:"This field is required"
+}
+const parseError=(error)=>{
+    const {name, params}= error
+    switch(name)
+     {
+           case 'sameAs':
+                return `Must be same as ${params.eq}`
+            case 'minLength':
+                return `This field requires a minimal lenght of ${params.min}`
+            default:
+               return errorMessages[name]
+     }
+}
+export {checkAuth,parseError}

@@ -24,8 +24,8 @@ export default ({store},inject)=>{
         // store.commit("LOGOUT")
         }
         // console.warn('Error status', err.response.status);
-        // console.warn('Error status', err.response);
-        return  Promise.resolve('')
+        console.warn('Error', err.response);
+        return  Promise.reject(err)
     });
     store.watch(state=>state.user.token, token=> {
         if (token){

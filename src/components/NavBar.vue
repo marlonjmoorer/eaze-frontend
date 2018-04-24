@@ -28,26 +28,33 @@
           <b-dropdown-item href="#" to="/post/new/edit" >Create Post</b-dropdown-item>
         </b-nav-item-dropdown>
         <template v-else>
-          
-            <b-popover target="signin"
-                      placement="bottomleft"
-                      triggers="click">
-                        <template slot="title">
-                        <b-btn  class="close" aria-label="Close">
-                          <span class="d-inline-block" aria-hidden="true">&times;</span>
-                        </b-btn>
-                       Sign In
-                      </template>
-                       <sign-in-form/>
+            <b-popover  target="signin"
+              placement="bottomleft"
+              triggers="click">
+                <template slot="title">
+                <b-btn  class="close" @click="$root.$emit('bv::hide::popover')" aria-label="Close">
+                  <span class="d-inline-block" aria-hidden="true">&times;</span>
+                </b-btn>
+                Sign In
+                </template>
+            <sign-in-form/>
           </b-popover>
           <b-button id="signin"  size="sm" class="mr-1"  >
                   Signin
                   <i class="fas fa-sign-in-alt"></i>
           </b-button> 
-          <b-button  to="/signup" size="sm"  >
+          <b-button v-b-modal="'signup'" size="sm"  >
                   Signup
                   <i class="fas fa-user-plus"></i>
           </b-button>
+
+          <b-modal id="signup" 
+          lazy 
+          @show="$root.$emit('bv::hide::popover')" 
+          title="Signup"
+          hide-footer >
+            <signup-form/>
+          </b-modal>
         </template>
       </b-navbar-nav>
 
@@ -58,10 +65,11 @@
 
 <script>
 import SignInForm from './SignInForm.vue';
+import SignupForm from './SignupForm.vue';
 
 import {mapGetters,mapMutations,mapActions,mapState} from 'vuex'
 export default {
-    components:{SignInForm},
+    components:{SignInForm,SignupForm},
     computed:{
         ...mapState("user",["userInfo"]),
         ...mapGetters("user",["loggedIn"])
