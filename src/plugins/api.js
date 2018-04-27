@@ -21,7 +21,7 @@ export default ({store},inject)=>{
     api.interceptors.response.use(null, function (err) {
         const {response}= err
         if (response&&response.status === 401) {
-        // store.commit("LOGOUT")
+         store.commit("LOGOUT")
         }
         // console.warn('Error status', err.response.status);
         console.warn('Error', err.response);

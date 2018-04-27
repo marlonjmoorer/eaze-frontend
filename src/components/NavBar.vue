@@ -21,7 +21,7 @@
 
         <b-nav-item-dropdown v-if="loggedIn" right  >
           <template slot="button-content">
-            <em class="text-white">{{userInfo.full_name}}</em>
+            <em class="text-white">{{userInfo.profile.handle}}</em>
           </template>
           <b-dropdown-item href="#" to="/profile" >Profile</b-dropdown-item>
           <b-dropdown-item href="#" @click="LOGOUT" >Signout</b-dropdown-item>

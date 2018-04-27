@@ -68,7 +68,11 @@ export const actions={
     addComment({dispatch}, comment) {
         return this.$api.post(`/comments/`, comment)
             .then(res => {
-                dispatch("getPost", comment.slug)
-            })
+                return res.data
+            }).catch(console.log)
     },
+    loadReplies({commit},commentId){
+        return this.$api.get(`/comments/${commentId}/replies`)
+            .catch(console.log)
+    }
 }

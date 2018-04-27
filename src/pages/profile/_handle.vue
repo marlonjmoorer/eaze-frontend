@@ -19,9 +19,8 @@
                 <b-button v-b-modal.profileModal variant="info" >
                   Update Profile
                 </b-button>
-                <b-modal id="profileModal" size="lg" title="Profile">
-                   <edit-profile :profile="profile"/>
-                   <div slot="modal-footer"></div>
+                <b-modal id="profileModal" size="lg" title="Profile" hide-footer>
+                   <edit-profile-form :profile="profile"/>
                 </b-modal>
               </b-col>
             </b-row>
@@ -36,7 +35,7 @@
                 </template>
               </b-col>
               <b-col>
-                 
+                
                   <b-popover target="follow"
                     placement="left"
                     title="Popover!"
@@ -53,12 +52,14 @@
                     <i class="fa fa-comments"></i> Comments<b-badge variant="light">4</b-badge>
                   </b-badge>
                   <hr/>
-                  <h1>
+                  <div v-if="profile.website">
+                    <label>Website: &nbsp; </label><a :href="profile.website">{{profile.website}}</a>
+                  </div>
+                  <h3>
                     <b-badge :key="i" v-for="(link,i) in profile.links" 
                     href="#" 
                     variant="secondary"><i :class="`fab fa-${link.link_type}`"></i></b-badge>
-                    
-                  </h1> 
+                  </h3> 
               </b-col>
 
             </b-row>
@@ -94,14 +95,15 @@
 
 <script>
 import {mapGetters,mapMutations,mapActions,mapState} from 'vuex'
-import EditProfile from '@/components/EditProfile.vue';
+import EditProfileForm from '@/components/EditProfileForm.vue';
+
 import PostListItem from '@/components/PostListItem.vue';
 import FollowButton from '@/components/FollowButton.vue';
 
 export default {
   props:['handle'],
   middleware:'auth',
-  components:{EditProfile,PostListItem,FollowButton},
+  components:{EditProfileForm,PostListItem,FollowButton},
   async asyncData ({ store,params }) {
     store.dispatch("user/tokenLogin")
     await store.dispatch("profile/loadProfile",params.handle)

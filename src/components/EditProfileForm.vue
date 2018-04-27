@@ -1,25 +1,20 @@
 <template>
-    <div>
+    <form  @submit.prevent="submit">
         <b-row>
             <b-col>
-                 <b-form-group 
-                    label="Website:">
-                    <b-form-input id="exampleInput1"
-                                type="text"
-                                 v-model="updatedProfile.website"
-                                placeholder="Website">
-                    </b-form-input>
-                </b-form-group>
-                <b-form-group id="exampleInputGroup1"
-                    label="About:">
-                     <b-form-textarea id="textarea1"
-                     placeholder="Enter something"
-                     v-model="updatedProfile.about"
-                     :rows="3"
-                     :max-rows="6">
-                    </b-form-textarea>
-                    
-                </b-form-group>
+                <form-field
+                    label="Website:"
+                    placeholder="Website"
+                    :model.sync="updatedProfile.website"
+                    :validation="$v.updatedProfile.website"/>
+                
+               <form-field
+                    type="textarea"
+                    label="About:"
+                    placeholder="About"
+                    :model.sync="updatedProfile.about"
+                    :validation="$v.updatedProfile.about"
+                    />
                 <hr>
                 <b-btn id="link" variant="link">
                  Add Social Link
@@ -36,43 +31,52 @@
                     <b-input-group-text slot="prepend">
                         <span><i :class="`fab fa-${link.link_type}`"></i></span>
                     </b-input-group-text>
-                    <b-form-input :disabled="link.delete" v-model="link.url" ></b-form-input>
-                    <b-input-group-addon append v-if="!link.delete" >
-                        <b-btn  @click="removeLink(i)" variant="danger"><i class="fas fa-trash"></i></b-btn>
-                        
+                    <b-form-input :class="{ 'deleted': link.delete }" :disabled="link.delete" v-model="link.url" ></b-form-input>
+                    <b-input-group-addon append  >
+                        <b-btn v-if="!link.delete" @click="removeLink(i)" variant="danger"><span> <i class="fas fa-trash"></i></span></b-btn>
+                        <b-btn  v-else @click="addLink(link)" variant="success"><span><i class="fas fa-undo"></i></span></b-btn>
                     </b-input-group-addon>
-                    <b-input-group-addon append v-else>
-                        <button class="btn-success btn" @click="addLink(link)" variant="success">yo</button>
-                    </b-input-group-addon>
+                    <!-- <b-input-group-addon append v-else>
+                        <b-btn  @click="addLink(link)" variant="success"><i class="fas fa-undo"></i></b-btn>
+                    </b-input-group-addon> -->
                 </b-input-group>
             </b-col>
-             <b-col >
+             <b-col align-self="center" >
+                 <b-row>
                 <b-img 
                 rounded="circle" 
                 thumbnail 
                 fluid 
-                class="avi" 
+                class="avi mx-auto" 
                 :src="preview||'https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX7825622.jpg'" ></b-img> 
-                <label for="photo" class="btn btn-info">
+                 </b-row>
+                  <b-row>
+                      <label for="photo" class="btn btn-info mx-auto">
                     <i class="fas fa-camera"></i>
                     Upload new  photo
                     <input id="photo" @change="updatedProfile.photo=$event.target.files[0]" type="file" v-show="false" />
                 </label>
+                 </b-row>
+              
+               
             </b-col>
         </b-row>
         <b-row>
             <b-col>
-             <b-button type="submit" @click="submit" variant="primary">Submit</b-button>
+             <b-button type="submit" variant="primary">Submit</b-button>
             </b-col>
         </b-row>
-    </div>
+    </form>
     
    
 </template>
 
 <script>
 import {mapActions} from 'vuex'
+import { required, url,email,maxLength,minLength } from "vuelidate/lib/validators"
+import FormField from './FormField.vue';
 export default {
+    components:{FormField},
     props:['profile'],
     data(){
         return{
@@ -87,9 +91,6 @@ export default {
     },
     computed:{
         preview:function(){
-           /*  if(this.photoFile){
-                return URL.createObjectURL(this.photoFile)
-            } */
             if(! this.updatedProfile.photo){return''}
             if(typeof this.updatedProfile.photo==="string"){
                  return  this.updatedProfile.photo
@@ -118,24 +119,26 @@ export default {
                 this.$set(this.updatedProfile.links,i,link)
             }else{
                 this.updatedProfile.links.splice(i,1)
-            }
-            
+            } 
         },
         submit(){
-            const form=new FormData()
-            const data= this.updatedProfile
-            form.append("about",data.about)
-            form.append("website",data.website)
-            form.append("links", JSON.stringify(data.links))
-            
-            if((data.photo instanceof File)){
-                form.append("photo",data.photo)
-            }
 
-            this.updateProfile(form).then(res=>{
+            if(!this.$v.$invalid){
+                const form=new FormData()
+                const data= this.updatedProfile
+                form.append("about",data.about)
+                form.append("website",data.website)
+                form.append("links", JSON.stringify(data.links))
                 
-            })
+                if((data.photo instanceof File)){
+                    form.append("photo",data.photo)
+                }
 
+                this.updateProfile(form).then(res=>{
+                    
+                })
+            }
+            
         }
          
     },
@@ -144,10 +147,25 @@ export default {
             this.updatedProfile={...val}
         }
     },
+    validations:{
+        updatedProfile: 
+            { 
+             website:{
+                 url
+             },
+             about:{
+                maxLength:maxLength(140),
+                required 
+             }
+        }
+       
+    }
 
 }
 </script>
 
 <style>
-
+.deleted{
+    text-decoration: line-through;
+}
 </style>

@@ -21,7 +21,8 @@ const checkAuth=(loggedIn,url)=>{
 //Validate helpers
 const errorMessages={
     email:"Must be valid email",
-    required:"This field is required"
+    required:"This field is required",
+    "url":"Invalid url"
 }
 const parseError=(error)=>{
     const {name, params}= error

@@ -110,7 +110,7 @@ export default {
            
         }
     },
-     validations:{
+    validations:{
            first_name:{required},
            last_name:{required},
            email:{required,email},

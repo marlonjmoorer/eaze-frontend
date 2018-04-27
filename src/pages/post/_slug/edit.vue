@@ -53,7 +53,7 @@
               <b-form-group label="Body" >
                 <no-ssr>
                  <froala :tag="'textarea'" v-model="post.body"></froala>
-                 </no-ssr> 
+                </no-ssr> 
                   <!-- <vue-html5-editor :content="content" @change="updateContent" :height="500"></vue-html5-editor> -->
               </b-form-group> 
               <b-button @click="submit(false)" variant="success">Publish</b-button>
@@ -204,7 +204,7 @@ export default {
     openPreview(){
       if(!this.previewWindow){
         
-        var previewWindow=window.open(`/post/${this.post.slug}/preview`,'','height=1000,width=750')
+        var previewWindow=window.open(`/post/${this.post.slug||'new'}/preview`,'','height=1000,width=750')
         previewWindow.onbeforeunload=()=>{
           this.previewWindow=null
           previewWindow.onload=null

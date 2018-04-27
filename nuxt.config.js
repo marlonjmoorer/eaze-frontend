@@ -6,6 +6,7 @@ module.exports = {
     plugins: [
         {src:'~/plugins/storage.js',ssr:false},
         {src:'~/plugins/vendor.js',ssr:false},
+        {src:'~/plugins/validate.js'},
         {src:'~/plugins/bootstrap.js'},
         {src:'~/plugins/api.js'},
         {src:'~/plugins/authGuard.js'}
@@ -45,7 +46,7 @@ module.exports = {
     router: {
         middleware: 'auth'
     },
-    mode:"spa",
+   // mode:"spa",
     loading: {
         color: 'blue',
         height: '5px'

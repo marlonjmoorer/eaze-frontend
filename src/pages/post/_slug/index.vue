@@ -3,7 +3,8 @@
      <b-row>
          <b-col md="8" sm="12">
             <post-content v-if="post" :post="post"/>
-            <comment-form  v-if="post" :post="post"/>
+            <comment-form  v-if="post" :slug="post.slug" @reply="onReply"/>
+            <comment-list :comments="post_comments" :slug="post.slug" class="mt-2"/>
          </b-col>
          <b-col md="4" sm="12">
             
@@ -16,33 +17,42 @@
 <script>
 import {mapActions,mapState} from 'vuex'
 import PostContent from '@/components/PostContent.vue';
-import CommentForm from '../../../components/CommentForm.vue';
-
+import CommentForm from '@/components/CommentForm.vue';
+import CommentList from '@/components/CommentList.vue';
 
 export default {
-    props:["slug"],
     components:{
         CommentForm,
-        PostContent
+        PostContent,
+        CommentList
     },
-    async asyncData ({ params,store }) {
+   
+    async fetch ({ params,store }) {
        if(params.slug){
             await  store.dispatch("articles/getPost",params.slug)
-            const {currentPost}= store.state.articles
-            return{post:currentPost}
        }  
-       return{}
     },
     data:()=>({
         commentBody:""
     }),
     computed:{
+        ...mapState("articles",{
+            post:'currentPost'
+        }),
+        post_comments(){
+                return this.post.comments.filter(c=>!(c.parent))
+        },
         posted_date:function(){
             var options = {  
                 weekday: "long", year: "numeric", month: "short",  
                 day: "numeric", hour: "2-digit", minute: "2-digit"  
             };  
            return new Date(this.post.posted).toLocaleDateString("en-US",options)
+        },
+    },methods:{
+        ...mapActions("articles",['getPost']),
+        onReply(){
+            this.getPost(this.post.slug)
         }
     }
     

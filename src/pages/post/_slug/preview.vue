@@ -11,10 +11,12 @@
 import PostContent from '@/components/PostContent.vue';
 export default {
     components:{PostContent},
-     async asyncData ({ params,store }) {
-         
-         return {post:store.state.articles.previewPost}
-     },
+
+    async asyncData ({ params,store }) {
+        
+        return {post:store.state.articles.previewPost}
+    },
+    layout: 'blank',
     data:()=>({
        post: {
                 title:"Title",

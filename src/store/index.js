@@ -18,6 +18,8 @@ export const actions={
                         'Content-Type': 'application/json'
                     }
                     await store.commit("user/LOGIN_SUCESS", token)
+                    console.log(store)
+                    store.dispatch("user/tokenLogin")
                 } 
              }
          } catch (e) {

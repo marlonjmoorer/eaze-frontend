@@ -1,46 +1,39 @@
 <template>
-   <div>
-        <b-form @submit.prevent="postComment" >
-                    <b-form-group 
-                            label="Comment">
-                        <b-form-textarea 
-                            v-model="commentBody"
-                            :rows="3"
-                            :max-rows="100">
-                        </b-form-textarea>
-                    </b-form-group>
-                    <b-button type="submit" variant="info">Submit</b-button>
-        </b-form>
-        <b-form-group >
-            <comment-list :comments="post.comments" class="mt-2">
-
-            </comment-list>
-        </b-form-group>
-    </div>
+    <b-form @submit.prevent="postComment" >
+                <b-form-group>
+                    <b-form-textarea 
+                        v-model="commentBody"
+                        :max-rows="100">
+                    </b-form-textarea>
+                </b-form-group>
+                <b-button class="right" size="sm" type="submit" variant="info">Send</b-button>
+    </b-form>
 </template>
 
 <script>
 import {mapActions,mapState} from 'vuex'
-import CommentList from '@/components/CommentList.vue';
 export default {
-    components:{CommentList},
-    props:["post"],
+    props:["slug","commentId"],
+     name:'comment-form',
     data:()=>({
         commentBody:""
     }),
-    computed:{
+    methods:{
         ...mapActions("articles",['getPost',"addComment"]),
-    },
-    postComment(){
-            if(this.commentBody){
-                let data={
-                    slug:this.post.slug,
-                    body:this.commentBody
+        postComment(){
+                if(this.commentBody){
+                    let data={
+                        slug:this.slug,
+                        body:this.commentBody,
+                        parent:this.commentId
+                    }
+                    console.log(data)
+                    this.addComment(data).then(comment=>{
+                         this.$emit('reply',comment);
+                    })
+                    this.commentBody=""
                 }
-                console.log(data)
-                this.addComment(data)
-                this.commentBody=""
-            }
+        }
     }
 
 };

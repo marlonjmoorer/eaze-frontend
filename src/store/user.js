@@ -22,25 +22,13 @@ export const mutations={
 export const actions={
 
     tokenLogin({state,commit}){
+        console.log("exchange")
         this.$api.post("/exchange/",{token: state.token})
         .then(res=>{
             commit("USER_FETCHED", res.data.user)
         })
     },
-    checkToken({state}) {
-        if (state.token) {
-            let jwt = jwtDecode(state.token)
-            console.log(jwt)
-            var current_time = Date.now() / 1000;
-            if (jwt.exp < current_time) {
-                Api
-                    .post("/refresh/", {token: state.token})
-                    .then(res => {
-                        commit("LOGIN_SUCESS", res.data.token)
-                    })
-            }
-        }
-    },
+   
     login({ commit }, form) {
         return this.$api
             .post("/login/", form)
