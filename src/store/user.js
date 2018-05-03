@@ -8,7 +8,6 @@ export const  getters={
 }
 export const mutations={
         LOGIN_SUCESS(state, token) {
-            console.log(token)
             state.token = token
         },
         LOGOUT(state) {
@@ -22,15 +21,19 @@ export const mutations={
 export const actions={
 
     tokenLogin({state,commit}){
-        console.log("exchange")
-        this.$api.post("/exchange/",{token: state.token})
-        .then(res=>{
-            commit("USER_FETCHED", res.data.user)
-        })
+        if(state.token){
+            this.$server.post("/exchange/",{token: state.token})
+            .then(res=>{
+                commit("USER_FETCHED", res.data.user)
+            }).catch(err=>{
+                commit('LOGOUT')
+            })
+        }
+        
     },
    
     login({ commit }, form) {
-        return this.$api
+        return this.$server
             .post("/login/", form)
             .then(res => {
                 const {token, user} = res.data
@@ -39,6 +42,6 @@ export const actions={
             })
     },
     signup(context, data) {
-        return this.$api.post("/users/", data)
+        return this.$server.post("/users/", data)
     },
 }

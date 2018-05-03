@@ -18,9 +18,7 @@ export default {
         CommentItem:() => import('./CommentItem.vue')
     },
     name:'comment-list',
-    beforeCreate(){
-      //  this.$options.components.CommentItem=() => import('./CommentItem.vue')
-    },
+
 }
 </script>
 

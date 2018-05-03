@@ -76,7 +76,7 @@ import TagSearch from '@/components/TagSearch.vue';
 
 export default {
   components:{PostContent,TagSearch},
-  async asyncData ({ params,store }) {
+  async asyncData ({ params,store ,redirect}) {
 
     let defaultPost={
         title:"",
@@ -97,6 +97,9 @@ export default {
      if(params.slug&&params.slug!="new"){
         await  store.dispatch("articles/getPost",params.slug)
         const {currentPost}= store.state.articles
+        if(!store.getters.canEditPost){
+          throw new Error("Access Denied")
+        }
         defaultPost.title=currentPost.title,
         defaultPost.body=currentPost.body,
         defaultPost.isDraft=currentPost.draft,
@@ -135,7 +138,7 @@ export default {
     }
   },
   computed:{
-    ...mapState(["currentPost","user"]),
+    ...mapGetters("user",['userInfo']),
     previewUrl:function(){
       return this.image.url||(this.image.file?URL.createObjectURL(this.image.file):"");
     },

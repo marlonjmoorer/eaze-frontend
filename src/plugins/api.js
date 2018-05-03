@@ -1,5 +1,7 @@
 import axios from 'axios'
-export default ({store},inject)=>{
+
+
+export default ({store,redirect},inject)=>{
     const api = axios.create({
         baseURL: process.env.baseUrl
     })
@@ -19,12 +21,24 @@ export default ({store},inject)=>{
         return req
     })
     api.interceptors.response.use(null, function (err) {
-        const {response}= err
+        const {response,config}= err
         if (response&&response.status === 401) {
-         store.commit("LOGOUT")
+            store.commit("user/LOGOUT")
+            if(api.defaults.headers.Authorization){
+                config.headers.Authorization=null
+                
+                console.log("retrying")
+                return api.request(config);
+            }
         }
         // console.warn('Error status', err.response.status);
-        console.warn('Error', err.response);
+        const {status, statusText,headers,data }=response
+
+        console.log('Url',config.url)
+        console.warn('Error',statusText);
+        console.log('Status :',status)
+        console.log('Headers :',headers)
+        console.log('Data :', data)
         return  Promise.reject(err)
     });
     store.watch(state=>state.user.token, token=> {
@@ -35,5 +49,5 @@ export default ({store},inject)=>{
              }
         }
     })
-    inject("api",api)
+    inject("server",api)
 }

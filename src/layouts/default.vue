@@ -11,6 +11,7 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
+import {mapGetters,mapMutations,mapActions,mapState} from 'vuex'
 export default {
     components:{NavBar},
     head:{
@@ -20,6 +21,17 @@ export default {
         //    { src: 'https://use.fontawesome.com/releases/v5.0.6/js/all.js' }
         ],
      
+    },
+    methods:{
+        ...mapActions("user",["tokenLogin"])
+    },
+    computed:{
+        ...mapGetters("user",["loggedIn"])
+    },
+    created(){
+        if(!this.loggedIn){
+            this.tokenLogin()
+        }        
     }
 }
 
@@ -38,7 +50,7 @@ body{
  
 }
 .footer{
-    height: 200px;
+    /* height: 200px; */
 }
 
 </style>

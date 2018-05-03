@@ -1,3 +1,5 @@
+import decode from 'jwt-decode'
+
 const checkAuth=(loggedIn,url)=>{
     console.log("url",url)
     console.log("loggedIn",loggedIn)
@@ -5,7 +7,7 @@ const checkAuth=(loggedIn,url)=>{
    var cases=[]
    if (!loggedIn) {
        cases=[
-           /^\/profile/,
+           ///^\/profile/,
            /^\/post\/(.*)\/(edit|preview)/
        ]
    }else{
@@ -36,4 +38,10 @@ const parseError=(error)=>{
                return errorMessages[name]
      }
 }
-export {checkAuth,parseError}
+
+const isTokenExpired=(token)=>{
+    console.log(decode(token))
+    decode(token).exp < new Date().getTime()
+}
+
+export {checkAuth,parseError,isTokenExpired}

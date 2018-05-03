@@ -9,7 +9,12 @@ export const state =()=>({
         image:"",
         author:{"user":"me"},
         tags:[]
-    }
+    },
+    searchResults:{
+        people:[],
+        posts:[],
+        tags:[]
+    },
 })
 export const mutations={
    
@@ -24,30 +29,34 @@ export const mutations={
     },
     UPDATE_PREVEIW(state, post){
         state.previewPost=post
+    },
+    SET_SEARCH_RESULTS(state,{posts,tags}){
+        state.searchResults=posts
+        state.tagSearchResults=tags
     }
 }
 
 export const actions={
     loadPostList({commit, state}) {
-        return this.$api
+        return this.$server
             .get("/post")
             .then(res => {
-                commit("SET_POSTS", res.data)
+                commit("SET_POSTS", res.data.results)
             })
     },
     loadTagList({commit}, query) {
-        return this.$api
+        return this.$server
             .get("/tags", {
             params: {
                 q: query
             }
         })
             .then(res => {
-                commit("SET_TAGS", res.data)
+                commit("SET_TAGS", res.data.results)
             })
     },
     getPost({commit}, slug) {
-        return this.$api
+        return this.$server
             .get(`/post/${slug}`)
             .then(res => {
                 commit("POST_FETCHED", res.data)
@@ -55,24 +64,26 @@ export const actions={
     },
     publishPost({commit}, form) {
         if (form.has("slug")) {
-            return this.$api.put(`/post/${form.get("slug")}/`, form).then(res => res.status)
+            return this.$server.put(`/post/${form.get("slug")}/`, form).then(res => res.status)
         }
-        return this.$api.post("/post/", form).then(res => res.status)
+        return this.$server.post("/post/", form).then(res => res.status)
     },
     loadPostForAuthor({commit}, handle) {
-        return this.$api.get(`/profile/${handle}/posts`)
+        return this.$server.get(`/profile/${handle}/posts`)
             .then(res => {
+                
                 commit("SET_POSTS", res.data)
             })
     }, 
     addComment({dispatch}, comment) {
-        return this.$api.post(`/comments/`, comment)
+        return this.$server.post(`/comments/`, comment)
             .then(res => {
                 return res.data
             }).catch(console.log)
     },
     loadReplies({commit},commentId){
-        return this.$api.get(`/comments/${commentId}/replies`)
+        return this.$server.get(`/comments/${commentId}/replies`).then(res=>res.data)
             .catch(console.log)
-    }
+    },
+    
 }

@@ -73,7 +73,7 @@ export default {
       show: false
     }),
     methods:{
-        ...mapActions(['deletePost']),
+        ...mapActions('articles',['deletePost']),
         open(){
           this.$refs.pop.$emit('open')
         },

@@ -16,31 +16,25 @@ export const actions={
 
     loadProfile({commit}, handle) {
         console.log("fetching profile")
-        return this.$api.get(handle
-            ? `/profile/${handle}`
-            : "/profile")
+        return this.$server.get(`/profile/${handle}`)
             .then(res => {
                 commit("PROFILE_FETCHED", res.data)
             })
     },
     updateProfile({commit}, profile) {
-        return this.$api.patch(`/profile/`, profile)
+        return this.$server.patch(`/profile/`, profile)
             .then(res => {
                 commit("PROFILE_FETCHED", res.data)
             })
     },
-    followAuthor({commit,state}, data) {
-        this.$api.patch(`/profile/${data.handle}/follow`, data)
+    followAuthor({commit,dispatch}, data) {
+        this.$server.patch(`/profile/${data.handle}/follow`, data)
             .then(() => {
-                return this.$api
-                    .get(`/users/${state.user.id}`)
-                    .then(res => {
-                        commit("USER_FETCHED", res.data)
-                    })
+                dispatch("user/tokenLogin",null,{root:true})
             })
     },
     deletePost({state, dispatch}, id) {
-        this.$api.delete(`/post/${id}`)
+        this.$server.delete(`/post/${id}`)
             .then((res) => {
                 if (res.status == 204) {
                     dispatch("loadProfile", state.profile.details.handle)

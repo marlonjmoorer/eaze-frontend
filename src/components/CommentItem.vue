@@ -7,9 +7,9 @@
         <p class="mb-1">
         {{comment.body}}
         </p>
-        <b-btn class="mb-2" size="sm" variant="primary" @click="openComment=!openComment" pill>Reply </b-btn>
+        <b-btn v-if="loggedIn" class="mb-2" size="sm" variant="primary" @click="openComment=!openComment" >Reply </b-btn>
         <b-btn class="mb-2 ml-1" size="sm" v-if="comment.hasReplies||replies.length>0"  v-b-toggle="`reply-${comment.id}`" >
-             View Replies  
+             View Replies <b-badge>{{comment.replyCount}}</b-badge>
         </b-btn>
         
         <comment-form v-show="openComment" :slug="slug" :commentId="comment.id" @reply="onReply" ></comment-form>
@@ -26,7 +26,7 @@
 import CommentForm from './CommentForm.vue';
 import CommentList from './CommentList.vue';
 
-import {mapActions,mapState} from 'vuex'
+import {mapActions,mapState,mapGetters} from 'vuex'
 export default {
     props:['comment','slug'],
     components:{CommentForm,CommentList},
@@ -36,28 +36,25 @@ export default {
         openReplies:false
     }),
     name:'comment-item',
+    computed:{
+        ...mapGetters("user",["loggedIn"])
+    },
     methods:{
         ...mapActions("articles",["loadReplies"]),
         getReplies(id){
             if(this.replies.length<1){
-                this.loadReplies(id).then(res=>{
-                    this.replies=res.data
+                this.loadReplies(id).then(data=>{
+                    this.replies=data
                 })
             }
             
         },
         onReply(comment){
             console.log('replied')
-            this.open=false
             this.replies.push(comment)
             this.openReplies=true  
-            this.openComment=false         
-           // this.$root.$emit("bv::toggle::collapse",`reply-${this.comment.id}`)
-            // this.loadReplies(id).then(res=>{
-            //     //this.$root.$emit("bv::toggle::collapse",`reply-${id}`)
-            //     console.log(res)
-            //     this.replies=res.data
-            // })
+            this.openComment=false
+            this.comment.replyCount++;         
         }
     }
 

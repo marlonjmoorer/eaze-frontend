@@ -73,14 +73,14 @@
         <b-tab title="Published Post" active>
           <b-row class="mt-3" >
              <b-col :key="post.id" v-for="post in publishedPost"  sm="6" md="6"  >
-                <post-list-item :post="post" :canEdit="true" />
+                <post-list-item :post="post" :canEdit="canEdit" />
              </b-col>  
           </b-row>
         </b-tab>
         <b-tab title="Drafts" v-if="canEdit" >
           <b-row class="mt-3" >
              <b-col :key="post.id" v-for="post in drafts"  sm="6" md="6"  >
-                <post-list-item :post="post" :canEdit="true" />
+                <post-list-item :post="post" :canEdit="canEdit" />
              </b-col>  
           </b-row>
         </b-tab>
@@ -104,12 +104,10 @@ export default {
   props:['handle'],
   middleware:'auth',
   components:{EditProfileForm,PostListItem,FollowButton},
-  async asyncData ({ store,params }) {
-    store.dispatch("user/tokenLogin")
-    await store.dispatch("profile/loadProfile",params.handle)
-    const  profile=store.state.profile.details
-    await store.dispatch("articles/loadPostForAuthor",profile.handle)
-    return{}
+  async fetch ({ store,params }) {
+    await Promise.all([ 
+      store.dispatch("profile/loadProfile",params.handle),
+      store.dispatch("articles/loadPostForAuthor",params.handle)])
   },
   computed:{
     ...mapGetters("profile",["authorsFollowing"]),

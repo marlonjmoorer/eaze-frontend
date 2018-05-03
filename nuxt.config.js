@@ -41,7 +41,8 @@ module.exports = {
         }
     },
     env: {
-        baseUrl: process.env.BASE_URL || 'http://localhost:8000'
+        baseUrl: process.env.BASE_URL || 'http://localhost:8000',
+        key:process.env.KEY||"eaze"
     },
     router: {
         middleware: 'auth'

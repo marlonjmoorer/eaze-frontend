@@ -3,7 +3,7 @@
      <b-row>
          <b-col md="8" sm="12">
             <post-content v-if="post" :post="post"/>
-            <comment-form  v-if="post" :slug="post.slug" @reply="onReply"/>
+            <comment-form  v-if="post&&loggedIn" :slug="post.slug" @reply="onReply"/>
             <comment-list :comments="post_comments" :slug="post.slug" class="mt-2"/>
          </b-col>
          <b-col md="4" sm="12">
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {mapActions,mapState} from 'vuex'
+import {mapActions,mapState,mapGetters} from 'vuex'
 import PostContent from '@/components/PostContent.vue';
 import CommentForm from '@/components/CommentForm.vue';
 import CommentList from '@/components/CommentList.vue';
@@ -39,6 +39,7 @@ export default {
         ...mapState("articles",{
             post:'currentPost'
         }),
+        ...mapGetters("user",["loggedIn"]),
         post_comments(){
                 return this.post.comments.filter(c=>!(c.parent))
         },
