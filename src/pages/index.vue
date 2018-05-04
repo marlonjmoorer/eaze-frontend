@@ -21,9 +21,8 @@
                   header-bg-variant="info"
                   header-text-variant="white"
                   align="center">
-               <b-badge href="#" :key="i" class="mr-1" v-for="(tag,i) in tags" >
-                {{tag.name}}
-              </b-badge>
+               
+               <tag-button :key="tag.id" :tag="tag" v-for="tag in tags" />
             </b-card>
 
         </b-col>
@@ -39,9 +38,10 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import PostListItem from '@/components/PostListItem.vue';
+import TagButton from '../components/TagButton.vue';
 
 export default {
-  components:{PostListItem},
+  components:{PostListItem,TagButton},
   async asyncData ({ store }) {
     await Promise.all([store.dispatch("articles/loadPostList"),store.dispatch("articles/loadTagList")])
     const {tags,postList}= store.state.articles

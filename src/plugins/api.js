@@ -7,7 +7,7 @@ export default ({store,redirect},inject)=>{
     })
       
     api.interceptors.request.use(req => {
-        console.log('Fetching: ',req.url)
+        console.log('Fetching: ',req.method,req.url)
         
         if(!req.headers.Authorization&& store.state.user.token){
             console.log("Adding token")

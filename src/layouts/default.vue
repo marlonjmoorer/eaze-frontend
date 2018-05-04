@@ -26,10 +26,10 @@ export default {
         ...mapActions("user",["tokenLogin"])
     },
     computed:{
-        ...mapGetters("user",["loggedIn"])
+        ...mapGetters("user",["loggedIn","userInfo"])
     },
     created(){
-        if(!this.loggedIn){
+        if(this.loggedIn&&!this.userInfo){
             this.tokenLogin()
         }        
     }

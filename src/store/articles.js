@@ -48,12 +48,11 @@ export const actions={
         return this.$server
             .get("/tags", {
             params: {
-                q: query
+                search: query
             }
-        })
-            .then(res => {
+        }).then(res => {
                 commit("SET_TAGS", res.data.results)
-            })
+        })
     },
     getPost({commit}, slug) {
         return this.$server

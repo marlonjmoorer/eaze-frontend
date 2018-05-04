@@ -76,7 +76,8 @@ export default {
     },methods:{
         ...mapMutations("user",['LOGOUT']),
        search(){
-         this.$router.push({ path: 'search', query: { q: this.query }})
+         console.log("searching")
+         this.$router.push({ path: '/search', query: { q: this.query }})
        }
     }
 }

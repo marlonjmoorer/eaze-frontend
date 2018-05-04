@@ -41,6 +41,7 @@ const parseError=(error)=>{
 
 const isTokenExpired=(token)=>{
     console.log(decode(token))
+    console.log( decode(token).exp < new Date().getMilliseconds())
     decode(token).exp < new Date().getTime()
 }
 

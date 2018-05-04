@@ -21,6 +21,7 @@ export const mutations={
 export const actions={
 
     tokenLogin({state,commit}){
+        console.log("tokenLogin")
         if(state.token){
             this.$server.post("/exchange/",{token: state.token})
             .then(res=>{
