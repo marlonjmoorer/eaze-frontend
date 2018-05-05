@@ -19,7 +19,7 @@ export const mutations={
 export const actions={
 
     getRelatedTags({commit}){
-        this.$server.get(`/tags/`).then(res=>
+        this.$http.get(`/tags/`).then(res=>
             commit("SET_RELATED_TAGS",res.data.results)
         )
     },
@@ -32,7 +32,7 @@ export const actions={
                 }
             }
             const requests= areas.map(area=>
-              this.$server.get(`/${area}/`,data)
+              this.$http.get(`/${area}/`,data)
             )
 
             return Promise.all(requests).then(results=>{

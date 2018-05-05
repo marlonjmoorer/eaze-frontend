@@ -57,12 +57,12 @@ export default {
         query:''
     }),
     computed:{
-        ...mapState(["tags"]),
+        ...mapState("articles",["tags"]),
         results:function(){
             return this.tags&&this.query? this.tags.filter(tag=>tag.name.toLowerCase().includes(this.query)):[]
         }
     },methods:{
-        ...mapActions(["loadTagList"]),
+        ...mapActions("articles",["loadTagList"]),
         searchTags(){
             console.log("object")
             if(this.query){

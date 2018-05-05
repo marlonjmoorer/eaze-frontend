@@ -134,9 +134,7 @@ export default {
                     form.append("photo",data.photo)
                 }
 
-                this.updateProfile(form).then(res=>{
-                    
-                })
+                this.updateProfile(form).catch(console.log)
             }
             
         }

@@ -19,20 +19,20 @@ export default {
         commentBody:""
     }),
     methods:{
-        ...mapActions("articles",['getPost',"addComment"]),
+        ...mapActions("articles",['getPost']),
         postComment(){
-                if(this.commentBody){
-                    let data={
-                        slug:this.slug,
-                        body:this.commentBody,
-                        parent:this.commentId
-                    }
-                    console.log(data)
-                    this.addComment(data).then(comment=>{
-                         this.$emit('reply',comment);
-                    })
-                    this.commentBody=""
+            if(this.commentBody){
+                let data={
+                    slug:this.slug,
+                    body:this.commentBody,
+                    parent:this.commentId
                 }
+                console.log(data)
+                this.$http.post(`/comments/`,data).then(res=>{
+                    this.$emit('reply',res.data);
+                })
+                this.commentBody=""
+            }
         }
     }
 

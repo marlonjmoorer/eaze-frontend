@@ -14,27 +14,26 @@ export const mutations={
 }
 export const actions={
 
-    loadProfile({commit}, handle) {
-        console.log("fetching profile")
-        return this.$server.get(`/profile/${handle}`)
-            .then(res => {
-                commit("PROFILE_FETCHED", res.data)
+    loadProfile({commit,dispatch}, handle) {
+        return this.$http.get(`/profiles/${handle}`)
+            .then(({data}) => {
+                commit("PROFILE_FETCHED",data)
             })
     },
     updateProfile({commit}, profile) {
-        return this.$server.patch(`/profile/`, profile)
+        return this.$http.patch(`/profiles/`, profile)
             .then(res => {
                 commit("PROFILE_FETCHED", res.data)
             })
     },
-    followAuthor({commit,dispatch}, data) {
-        this.$server.patch(`/profile/${data.handle}/follow`, data)
+    followAuthor({commit,dispatch}, handle) {
+        this.$http.post(`/profiles/${handle}/follow/`)
             .then(() => {
                 dispatch("user/tokenLogin",null,{root:true})
             })
     },
     deletePost({state, dispatch}, id) {
-        this.$server.delete(`/post/${id}`)
+        this.$http.delete(`/posts/${id}`)
             .then((res) => {
                 if (res.status == 204) {
                     dispatch("loadProfile", state.profile.details.handle)

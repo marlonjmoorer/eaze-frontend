@@ -1,9 +1,11 @@
 <template>
 <div>
+    <no-ssr>
+        <!-- <vuenut :store="$store.state"/> -->
+    </no-ssr>
     <nav-bar/>
     <nuxt/>
     <div class="footer">
-
     </div>
 </div>
   

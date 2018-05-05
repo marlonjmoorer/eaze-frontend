@@ -1,7 +1,12 @@
 import axios from 'axios'
 
 
-export default ({store,redirect},inject)=>{
+
+
+
+
+export default ({store,redirect,isServer},inject)=>{
+
     const api = axios.create({
         baseURL: process.env.baseUrl
     })
@@ -33,12 +38,24 @@ export default ({store,redirect},inject)=>{
         }
         // console.warn('Error status', err.response.status);
         const {status, statusText,headers,data }=response
+        if(process.server){
+            const logger=require("@/logger")
+            
+            logger.logJSON({
+                url:config.url,
+                statusText,
+                status,
+                headers,
+                data
+            })
+        }else{
 
-        console.log('Url',config.url)
-        console.warn('Error',statusText);
-        console.log('Status :',status)
-        console.log('Headers :',headers)
-        console.log('Data :', data)
+            console.log('Url',config.url)
+            console.warn('Error',statusText);
+             console.log('Status :',status)
+             console.log('Headers :',headers)
+            console.log('Data :', data)
+        }
         return  Promise.reject(err)
     });
     store.watch(state=>state.user.token, token=> {
@@ -49,5 +66,5 @@ export default ({store,redirect},inject)=>{
              }
         }
     })
-    inject("server",api)
+    inject("http",api)
 }

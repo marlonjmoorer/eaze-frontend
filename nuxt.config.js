@@ -16,7 +16,8 @@ module.exports = {
         'bootstrap-vue/dist/bootstrap-vue.css',
         'froala-editor/css/froala_editor.pkgd.min.css',
         'froala-editor/css/froala_style.min.css',
-        'font-awesome/css/font-awesome.css'
+        'font-awesome/css/font-awesome.css',
+        'vuenut/dist/vuenut.css'
        
     ],
     build:{

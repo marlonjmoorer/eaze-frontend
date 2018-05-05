@@ -83,7 +83,6 @@ export default {
         }
     },
     methods:{
-        ...mapActions('user',['signup']),
         onSubmit(e){
             if(!this.$v.$invalid){
                let {email ,password,first_name,last_name}=this
@@ -94,9 +93,9 @@ export default {
                     last_name
                 }
                 
-                this.signup(data).then(res=>{
+                this.$http.post("/users/", data).then(res=>{
                     if(res.data&&res.data.id){
-                        this.success=true
+                       this.success=true
                        e.target.reset()
                        this.$v$.$reset()
                     }

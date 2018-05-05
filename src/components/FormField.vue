@@ -42,19 +42,16 @@ export default {
     },
     methods:{
         handleChange(value){
-            console.log(value)
             this.validation.$touch()
             this.$emit('update:model',value)
         }
     },
     mounted(){
-       console.log(this.validation)
        const {$el}=this.$refs.field
        const form= $el.closest('form')
        if(form){
            form.addEventListener("submit", (e)=>{
                e.preventDefault();
-               
                 this.validation.$touch()
             });
        }

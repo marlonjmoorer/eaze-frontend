@@ -1,6 +1,7 @@
 .DS_Store
 node_modules/
 dist/
+logs/
 npm-debug.log
 yarn-error.log
 
@@ -11,3 +12,5 @@ yarn-error.log
 *.njsproj
 *.sln
 launch.json
+dump.backup
+dump.sql

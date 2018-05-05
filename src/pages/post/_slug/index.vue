@@ -27,10 +27,16 @@ export default {
         CommentList
     },
    
-    async fetch ({ params,store }) {
+    async fetch ({ params,store,redirect }) {
        if(params.slug){
             await  store.dispatch("articles/getPost",params.slug)
-       }  
+       }
+       console.log(store)
+       const {canEditPost} =store.getters
+       const {currentPost}=store.state.articles
+       if(currentPost.draft&&!canEditPost){
+           redirect('/404')
+       }
     },
     data:()=>({
         commentBody:""

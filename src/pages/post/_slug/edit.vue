@@ -159,27 +159,29 @@ export default {
 
        const {title,body,isDraft,addedTags,slug}=this.post
        if(title&& body){
-         console.log(this)
-         let form= new FormData()
-         form.append("title",title) 
-         form.append("body",body)
-         form.append("tags",JSON.stringify(addedTags))
-         if(saveAsDraft&&isDraft){
-           form.append("draft",saveAsDraft)
-         }
-         if(slug){
-           form.append("slug",slug)
-         }
-        
+          let form= new FormData()
+          form.append("title",title) 
+          form.append("body",body)
+          form.append("tags",JSON.stringify(addedTags))
+          if(saveAsDraft&&isDraft){
+            form.append("draft",saveAsDraft)
+          }
 
-         this.prepareImages(form).then(this.publishPost).then(status=>{
-           if(status==201){
-             this.$router.push('/') 
-           }
-           if(status==200){
-             this.$router.push(`/post/${slug}`)
-           }
-         })
+          let request= new Promise(done=>done())
+          if(slug){
+            form.append("slug",slug)
+            request= this.$http.put(`/posts/${slug}/`, form)
+          }else{
+            request=this.$http.post("/posts/", form)
+          }
+        
+       //this.prepareImages(form).then(this.publishPost)
+          request.then(res=>{
+            console.log(res)
+            if(res.data.slug){
+                this.$router.push(`/post/${res.data.slug}`)
+              }
+          })
        } 
      },
      getFile(){
@@ -219,10 +221,6 @@ export default {
         this.previewWindow=previewWindow
       }
     }
-    
-  },
-  created(){
-   
     
   }
 }

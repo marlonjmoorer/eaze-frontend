@@ -16,15 +16,20 @@
     <p v-html="post.body"></p>
     <hr/>
     <h4 >
-        <b-badge class="mr-1" :key="i" v-for="(tag,i) in post.tags" >{{tag.name}}</b-badge> 
+        <tag-button class="mr-1" :key="tag.id" :tag="tag"  v-for="(tag) in post.tags"/>
+        
     </h4>
 </div>
    
 </template>
 
 <script>
+import TagButton from './TagButton.vue';
+
 export default {
+
 props:['post'],
+components:{TagButton},
 computed:{
      dateString:function(){
             var options = {  

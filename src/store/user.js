@@ -23,7 +23,7 @@ export const actions={
     tokenLogin({state,commit}){
         console.log("tokenLogin")
         if(state.token){
-            this.$server.post("/exchange/",{token: state.token})
+            this.$http.post("/exchange/",{token: state.token})
             .then(res=>{
                 commit("USER_FETCHED", res.data.user)
             }).catch(err=>{
@@ -34,15 +34,12 @@ export const actions={
     },
    
     login({ commit }, form) {
-        return this.$server
+        return this.$http
             .post("/login/", form)
             .then(res => {
                 const {token, user} = res.data
                 commit("LOGIN_SUCESS", token)
                 commit("USER_FETCHED", user)
             })
-    },
-    signup(context, data) {
-        return this.$server.post("/users/", data)
     },
 }

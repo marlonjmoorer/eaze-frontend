@@ -38,15 +38,14 @@ export const mutations={
 
 export const actions={
     loadPostList({commit, state}) {
-        return this.$server
-            .get("/post")
+        return this.$http
+            .get("/posts")
             .then(res => {
                 commit("SET_POSTS", res.data.results)
             })
     },
     loadTagList({commit}, query) {
-        return this.$server
-            .get("/tags", {
+        return this.$http.get("/tags", {
             params: {
                 search: query
             }
@@ -55,34 +54,16 @@ export const actions={
         })
     },
     getPost({commit}, slug) {
-        return this.$server
-            .get(`/post/${slug}`)
+        return this.$http
+            .get(`/posts/${slug}`)
             .then(res => {
                 commit("POST_FETCHED", res.data)
             })
     },
-    publishPost({commit}, form) {
-        if (form.has("slug")) {
-            return this.$server.put(`/post/${form.get("slug")}/`, form).then(res => res.status)
-        }
-        return this.$server.post("/post/", form).then(res => res.status)
-    },
     loadPostForAuthor({commit}, handle) {
-        return this.$server.get(`/profile/${handle}/posts`)
+        return this.$http.get(`/profiles/${handle}/posts`)
             .then(res => {
-                
                 commit("SET_POSTS", res.data)
             })
-    }, 
-    addComment({dispatch}, comment) {
-        return this.$server.post(`/comments/`, comment)
-            .then(res => {
-                return res.data
-            }).catch(console.log)
-    },
-    loadReplies({commit},commentId){
-        return this.$server.get(`/comments/${commentId}/replies`).then(res=>res.data)
-            .catch(console.log)
-    },
-    
+    },     
 }

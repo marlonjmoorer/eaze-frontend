@@ -43,11 +43,10 @@ export default {
         ...mapActions("articles",["loadReplies"]),
         getReplies(id){
             if(this.replies.length<1){
-                this.loadReplies(id).then(data=>{
+                this.$http.get(`/comments/${id}/replies`).then(({data})=>{
                     this.replies=data
                 })
             }
-            
         },
         onReply(comment){
             console.log('replied')

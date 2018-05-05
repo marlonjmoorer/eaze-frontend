@@ -35,12 +35,25 @@
                 </template>
               </b-col>
               <b-col>
-                
                   <b-popover target="follow"
                     placement="left"
-                    title="Popover!"
-                    triggers="hover focus">
-                            Hi
+                    title="Following"
+                    @show="loadFollowing"
+                    >
+                        <b-media 
+                          v-if="following"
+                          v-for="author in following"
+                          :key="author.id"
+                          right-align  
+                          vertical-align="center">
+                              <h5>{{author.handle}}</h5>
+                        <b-img slot="aside" width="55" height="55"  :src="author.photo||'http://via.placeholder.com/350x150'" />
+                        <follow-button  :profile="author"/>
+                        </b-media>
+                        <div v-else>
+                            None
+                        </div>
+                       <!-- <pre>{{JSON.stringify(following,null,4)}}</pre>     -->
                   </b-popover>
                   <b-badge id="follow" href="#" variant="primary">
                     <i class="fa fa-user"></i> Following <b-badge variant="light">{{profile.following.length}}</b-badge>
@@ -104,11 +117,15 @@ export default {
   props:['handle'],
   middleware:'auth',
   components:{EditProfileForm,PostListItem,FollowButton},
-  async fetch ({ store,params }) {
+  async fetch ({ store,params,app }) {
     await Promise.all([ 
       store.dispatch("profile/loadProfile",params.handle),
-      store.dispatch("articles/loadPostForAuthor",params.handle)])
+      store.dispatch("articles/loadPostForAuthor",params.handle)
+    ]).catch(console.log)
   },
+  data:()=>({
+    following:null
+  }),
   computed:{
     ...mapGetters("profile",["authorsFollowing"]),
     ...mapGetters("user",["userProfile"]),
@@ -125,18 +142,34 @@ export default {
     drafts: function(){return this.posts?this.posts.filter(p=>p.draft):[]},
   },
   methods:{
-    ...mapActions(["loadProfile","loadPostForAuthor","followAuthor"]),
+    ...mapActions("profile",["loadProfile"]),
+    loadFollowing(){
+      //if(!this.following){
+        this.following=[]
+        this.$http.get(`profiles/${this.profile.handle}/following`).then(({data})=>{
+            this.following=data
+        })
+     // }
+    }
   },
   watch:{
-    handle(handle){
-      this.loadProfile(this.handle)
+    userProfile(user){
+      console.log("update")
+      if(user.handle==this.profile.handle)
+      {
+        this.loadProfile(this.profile.handle)
+      }
     },
 
+    handle(handle){
+      //this.loadProfile(this.handle)
+    },
   },
   created(){
     this.$store.watch(state=>state.profile.details,details=>{
       this.$root.$emit('bv::hide::modal','profileModal')
     })
+
   }
 
 }

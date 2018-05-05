@@ -1,9 +1,7 @@
 <template>
-   
-        <b-button  v-if="visible"  variant="outline-info" @click="follow()" :pressed="following" >
-        {{following?"Following":"Follow"}}
-        </b-button>
-      
+    <b-button size="sm" v-if="visible"  :disabled="loading" variant="outline-info" @click="follow()" :pressed="following" >
+    {{following?"UnFollow":"Follow"}}
+    </b-button>
 </template>
 
 <script>
@@ -26,12 +24,13 @@ export default {
     methods:{
         ...mapActions("profile",["followAuthor"]),
         follow(){
-            this.followAuthor({
-                handle:this.profile.handle,
-                add:!this.following,
-                id:this.profile.id
-            })
+            this.followAuthor(this.profile.handle)
+            this.loading=true
         }
+    },watch:{
+        userProfile(){
+            this.loading=false
+        },
     }
 }
 </script>

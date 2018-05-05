@@ -19,7 +19,7 @@ export const actions={
                 if(state.user){
                     const {token}=state.user
                   
-                    this.$server.defaults.headers={
+                    this.$http.defaults.headers={
                         "Authorization":token?`JWT ${token}`:'',
                         'Content-Type': 'application/json'
                     }
