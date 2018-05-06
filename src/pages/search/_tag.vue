@@ -59,7 +59,7 @@ export default {
     },
     async asyncData ({store,params:{tag}}){
         await Promise.all([
-           store.dispatch("search/search",{query:tag,areas:["post","tags"]}),
+           store.dispatch("search/search",{query:tag,areas:["posts","tags"]}),
            store.dispatch("search/getRelatedTags"),
         ])
         const {searchResults,related}=store.state.search

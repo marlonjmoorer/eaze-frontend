@@ -16,9 +16,9 @@
                      </b-input-group>
                     
                     <b-form-group  label="Filters">
-                        <label class="mr-2"><input type="checkbox" value="post" v-model="areas"/> Articles</label> 
+                        <label class="mr-2"><input type="checkbox" value="posts" v-model="areas"/> Articles</label> 
                         <label class="mr-2"><input type="checkbox" value="tags" v-model="areas" />Categories </label> 
-                        <label class="mr-2"><input type="checkbox" value="profile" v-model="areas"/> People</label>
+                        <label class="mr-2"><input type="checkbox" value="profiles" v-model="areas"/> People</label>
                     </b-form-group>
                 </b-col>
             </b-row>
@@ -87,13 +87,15 @@ export default {
         ProfileCard,
         TagButton
     },
-    async fetch({store,query:{q}}){
-       await store.dispatch("search/search",{query:q,areas:["post","tags","profile"]})
+    async asyncData({store,query:{q}}){
+       const areas=["posts","tags","profiles"]
+       await store.dispatch("search/search",{query:q,areas})
+       return {areas}
     },
     data:()=>({
         query:null,
         loading:false,
-        areas:["post","tags","profile"],
+        //areas:["posts","tags","profiles"],
     }),
     methods:{
         ...mapActions("search",['search']),

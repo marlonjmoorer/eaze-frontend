@@ -27,7 +27,8 @@ export default ({store,redirect,isServer},inject)=>{
     })
     api.interceptors.response.use(null, function (err) {
         const {response,config}= err
-        if (response&&response.status === 401) {
+        if(response)
+        {if (response.status === 401) {
             store.commit("user/LOGOUT")
             if(api.defaults.headers.Authorization){
                 config.headers.Authorization=null
@@ -55,7 +56,7 @@ export default ({store,redirect,isServer},inject)=>{
              console.log('Status :',status)
              console.log('Headers :',headers)
             console.log('Data :', data)
-        }
+        }}
         return  Promise.reject(err)
     });
     store.watch(state=>state.user.token, token=> {

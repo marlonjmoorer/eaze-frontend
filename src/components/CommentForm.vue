@@ -13,7 +13,7 @@
 <script>
 import {mapActions,mapState} from 'vuex'
 export default {
-    props:["slug","commentId"],
+    props:["postId","commentId"],
      name:'comment-form',
     data:()=>({
         commentBody:""
@@ -23,7 +23,7 @@ export default {
         postComment(){
             if(this.commentBody){
                 let data={
-                    slug:this.slug,
+                    post_id:this.postId,
                     body:this.commentBody,
                     parent:this.commentId
                 }

@@ -20,7 +20,6 @@
                 <b-dropdown id="ddown1" variant="light"  right text="" >
                   <b-dropdown-item :to="`/post/${post.slug}/edit`">Edit Post</b-dropdown-item>
                   <b-dropdown-item @click="onDelete">Delete Post</b-dropdown-item>
-                  <b-dropdown-item>Third Action</b-dropdown-item>
                 </b-dropdown>
             </b-col>
           </b-row>    
@@ -73,7 +72,7 @@ export default {
       show: false
     }),
     methods:{
-        ...mapActions('articles',['deletePost']),
+        ...mapActions('profile',['deletePost']),
         open(){
           this.$refs.pop.$emit('open')
         },
@@ -87,7 +86,7 @@ export default {
         onDelete(){
           if(confirm(`Are you sure you want to delete ${this.post.slug}? `))
           {
-            this.deletePost(this.post.id)
+            this.deletePost(this.post.slug)
           }
         }
     },created(){

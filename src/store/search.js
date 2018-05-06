@@ -28,7 +28,8 @@ export const actions={
         if(query){ 
             const data={
                 params:{
-                    search:query
+                    search:query,
+                    draft:false
                 }
             }
             const requests= areas.map(area=>

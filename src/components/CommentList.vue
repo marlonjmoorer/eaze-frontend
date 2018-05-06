@@ -1,7 +1,7 @@
 <template>
   <b-list-group>
     <b-list-group-item :key="comment.id" v-for="(comment) in comments" class="flex-column align-items-start">
-        <comment-item :slug="slug" :comment="comment" ></comment-item>
+        <comment-item  :comment="comment" ></comment-item>
    </b-list-group-item>   
   
 </b-list-group>
@@ -12,7 +12,7 @@
 import CommentForm from './CommentForm.vue';
 import {mapActions,mapState} from 'vuex'
 export default {
-    props:['comments','slug'],
+    props:['comments'],
     components:{
         CommentForm,
         CommentItem:() => import('./CommentItem.vue')

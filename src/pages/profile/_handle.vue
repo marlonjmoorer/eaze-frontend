@@ -38,22 +38,15 @@
                   <b-popover target="follow"
                     placement="left"
                     title="Following"
-                    @show="loadFollowing"
-                    >
-                        <b-media 
-                          v-if="following"
-                          v-for="author in following"
-                          :key="author.id"
-                          right-align  
-                          vertical-align="center">
-                              <h5>{{author.handle}}</h5>
-                        <b-img slot="aside" width="55" height="55"  :src="author.photo||'http://via.placeholder.com/350x150'" />
-                        <follow-button  :profile="author"/>
-                        </b-media>
+                    @show="loadFollowing">
+                      <author-item 
+                       :key="author.id" 
+                       v-if="following"
+                       v-for="author in following"
+                       :author="author" />
                         <div v-else>
                             None
                         </div>
-                       <!-- <pre>{{JSON.stringify(following,null,4)}}</pre>     -->
                   </b-popover>
                   <b-badge id="follow" href="#" variant="primary">
                     <i class="fa fa-user"></i> Following <b-badge variant="light">{{profile.following.length}}</b-badge>
@@ -109,6 +102,7 @@
 <script>
 import {mapGetters,mapMutations,mapActions,mapState} from 'vuex'
 import EditProfileForm from '@/components/EditProfileForm.vue';
+import AuthorItem from '../../components/AuthorItem.vue';
 
 import PostListItem from '@/components/PostListItem.vue';
 import FollowButton from '@/components/FollowButton.vue';
@@ -116,7 +110,7 @@ import FollowButton from '@/components/FollowButton.vue';
 export default {
   props:['handle'],
   middleware:'auth',
-  components:{EditProfileForm,PostListItem,FollowButton},
+  components:{EditProfileForm,PostListItem,FollowButton,AuthorItem},
   async fetch ({ store,params,app }) {
     await Promise.all([ 
       store.dispatch("profile/loadProfile",params.handle),
@@ -144,12 +138,10 @@ export default {
   methods:{
     ...mapActions("profile",["loadProfile"]),
     loadFollowing(){
-      //if(!this.following){
         this.following=[]
         this.$http.get(`profiles/${this.profile.handle}/following`).then(({data})=>{
             this.following=data
         })
-     // }
     }
   },
   watch:{

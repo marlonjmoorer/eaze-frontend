@@ -32,11 +32,11 @@ export const actions={
                 dispatch("user/tokenLogin",null,{root:true})
             })
     },
-    deletePost({state, dispatch}, id) {
-        this.$http.delete(`/posts/${id}`)
+    deletePost({state, dispatch},slug) {
+        this.$http.delete(`/posts/${slug}`)
             .then((res) => {
                 if (res.status == 204) {
-                    dispatch("loadProfile", state.profile.details.handle)
+                    dispatch("articles/loadPostForAuthor", state.details.handle,{root:true})
                 } else {
                     throw new Error("Opps")
                 }

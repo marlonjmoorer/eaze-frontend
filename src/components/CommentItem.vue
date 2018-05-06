@@ -12,7 +12,7 @@
              View Replies <b-badge>{{comment.replyCount}}</b-badge>
         </b-btn>
         
-        <comment-form v-show="openComment" :slug="slug" :commentId="comment.id" @reply="onReply" ></comment-form>
+        <comment-form v-show="openComment" :postId="comment.post" :commentId="comment.id" @reply="onReply" ></comment-form>
        
          <b-collapse @shown="getReplies(comment.id)" @hidden="openReplies=false" :visible="openReplies"  :id="`reply-${comment.id}`">
             <hr/>

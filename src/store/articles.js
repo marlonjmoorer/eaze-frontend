@@ -39,7 +39,9 @@ export const mutations={
 export const actions={
     loadPostList({commit, state}) {
         return this.$http
-            .get("/posts")
+            .get("/posts",{params:{
+                draft:false
+            }})
             .then(res => {
                 commit("SET_POSTS", res.data.results)
             })
@@ -65,5 +67,6 @@ export const actions={
             .then(res => {
                 commit("SET_POSTS", res.data)
             })
-    },     
+    },  
+       
 }

@@ -3,7 +3,7 @@
      <b-row>
          <b-col md="8" sm="12">
             <post-content v-if="post" :post="post"/>
-            <comment-form  v-if="post&&loggedIn" :slug="post.slug" @reply="onReply"/>
+            <comment-form  v-if="post&&loggedIn" :postId="post.id" @reply="onReply"/>
             <comment-list :comments="post_comments" :slug="post.slug" class="mt-2"/>
          </b-col>
          <b-col md="4" sm="12">
