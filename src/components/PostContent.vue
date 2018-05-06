@@ -1,5 +1,5 @@
 <template>
-<div>
+<div >
     <h1 class="mt-4">{{post.title}}</h1>
     <p class="lead">
         by <nuxt-link :to="`/profile/${post.author.handle}`">{{post.author.user}}</nuxt-link> 
@@ -7,17 +7,11 @@
     <hr/>
         {{dateString}}
     <hr/>
-    <b-row v-if="post.image" >
-        <b-col class="banner">
-                <b-img :src="(post.image.url||post.image)" fluid alt="Responsive image"  />
-        </b-col>
-        <hr/>
-    </b-row>
-    <p v-html="post.body"></p>
+  
+    <p class="post-body" v-html="post.body"></p>
     <hr/>
     <h4 >
         <tag-button class="mr-1" :key="tag.id" :tag="tag"  v-for="(tag) in post.tags"/>
-        
     </h4>
 </div>
    
@@ -43,5 +37,7 @@ computed:{
 </script>
 
 <style>
-
+.post-body {
+    min-height: 400px
+}
 </style>

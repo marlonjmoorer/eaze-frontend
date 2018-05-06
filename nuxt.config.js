@@ -11,13 +11,26 @@ module.exports = {
         {src:'~/plugins/api.js'},
         {src:'~/plugins/authGuard.js'}
     ],
+    head: {
+        link: [
+          {
+            rel: 'stylesheet',
+            href: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'
+          },
+          {
+            rel: 'stylesheet',
+            href: 'https://unpkg.com/vue-wysiwyg@1.7.0/dist/vueWysiwyg.css'
+          }
+        ]
+    },
     css: [
         'bootstrap/dist/css/bootstrap.css',
         'bootstrap-vue/dist/bootstrap-vue.css',
         'froala-editor/css/froala_editor.pkgd.min.css',
         'froala-editor/css/froala_style.min.css',
         'font-awesome/css/font-awesome.css',
-        'vuenut/dist/vuenut.css'
+        'vuenut/dist/vuenut.css',
+        
        
     ],
     build:{

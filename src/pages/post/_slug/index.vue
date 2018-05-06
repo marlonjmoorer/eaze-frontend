@@ -1,13 +1,21 @@
 <template>
  <b-container class="page">
      <b-row>
-         <b-col md="8" sm="12">
+         <b-col >
             <post-content v-if="post" :post="post"/>
-            <comment-form  v-if="post&&loggedIn" :postId="post.id" @reply="onReply"/>
-            <comment-list :comments="post_comments" :slug="post.slug" class="mt-2"/>
-         </b-col>
-         <b-col md="4" sm="12">
+            <template v-if="!post.draft">
+                <h4 class="mt-3" >Comments:</h4>
+                <comment-form  v-if="post&&loggedIn" :postId="post.id" @reply="onReply"/>
+                <comment-list  :comments="post_comments" :slug="post.slug" class="mt-2"/>
+            </template>
             
+         </b-col>
+         <b-col sm="2">
+            <b-row class="mt-5">
+                <b-col>
+                    <b-btn :to="`/post/${post.slug}/edit`" >Edit</b-btn>
+                </b-col>
+            </b-row>
          </b-col>
      </b-row>
  </b-container>

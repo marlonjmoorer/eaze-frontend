@@ -11,7 +11,7 @@
           <b-row slot="header"
                 class="mb-0">
                 <b-col>
-                  <h6 >New Post</h6>
+                  <h6 >{{post.slug?"Edit Post": " New Post"}}</h6>
                 </b-col>
                 <b-col  md="6">
                   <b-button-group>
@@ -28,21 +28,27 @@
                     </b-button>
                   
                   </b-button-group>
-                  <tag-search :target="'tags'" :addedTags="post.addedTags" />
+                  <tag-search target="tags" :addedTags="post.addedTags" />
                 </b-col>
             </b-row>
             <input type="file" v-show="false" ref="fileInput" @change="handleFileChange" accept="image/*"/>
             <b-form-group >
                 <b-form-input :required='true' v-model="post.title" placeholder="Title" ></b-form-input>
             </b-form-group>
-            <b-dropdown id="ddown1" text="Add" dropup  class="m-md-2">
+            <b-form-group>
+              <span> Tags:</span><br/>
+                <b-badge href="#"  :key="i" class="mr-1" v-for="(tag,i) in post.addedTags" >
+                    {{tag.name}}  <b-badge @click="post.addedTags.splice(i,1)">x</b-badge>
+                </b-badge>
+            </b-form-group>
+            <!-- <b-dropdown id="ddown1" text="Add" dropup  class="m-md-2">
               <b-dropdown-item @click="getFile"> 
                 <i class="fas fa-image"></i> Image File
               </b-dropdown-item>
               <b-dropdown-item @click="post.image.external=true"> 
                 <i class="fas fa-link"></i> Image Url
               </b-dropdown-item>
-            </b-dropdown>
+            </b-dropdown> -->
             <b-form-group v-if="post.image.external">
               <b-form-input placeholder="Url" v-model="post.image.url" />
             </b-form-group>
@@ -54,8 +60,8 @@
                 <no-ssr>
                  <froala :tag="'textarea'" v-model="post.body"></froala>
                 </no-ssr> 
-                  <!-- <vue-html5-editor :content="content" @change="updateContent" :height="500"></vue-html5-editor> -->
               </b-form-group> 
+              
               <b-button @click="submit(false)" variant="success">Publish</b-button>
               <b-button v-if="post.isDraft" @click="submit(true)" variant="info">Save as Draft</b-button>
                
@@ -79,7 +85,7 @@ export default {
   async asyncData ({ params,store ,redirect}) {
 
     let defaultPost={
-        title:"",
+        title:"New Post",
         image:{
           url:"",
           file:null,

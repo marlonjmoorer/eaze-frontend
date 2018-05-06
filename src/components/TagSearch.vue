@@ -5,7 +5,7 @@
         placement="bottom"
         triggers="click">
         <template slot="title">
-            <b-btn  class="close" aria-label="Close">
+            <b-btn  class="close" @click="$root.$emit('bv::hide::popover')" aria-label="Close">
                 <span class="d-inline-block" aria-hidden="true">&times;</span>
             </b-btn>
             Tags
@@ -16,12 +16,7 @@
                             description="Search for a tag">   
                 <b-form-input  @keyup.native="searchTags()" id="query"  size="sm" v-model="query" />
             </b-form-group>
-            <b-alert show class="small">
-                <strong>Current Tags:</strong><br/>
-                <b-badge href="#"  :key="i" class="mr-1" v-for="(tag,i) in addedTags" >
-                    {{tag.name}}  <b-badge @click="addedTags.splice(i,1)">x</b-badge>
-                </b-badge>
-            </b-alert>
+            
         </div>
     </b-popover>
     
@@ -29,12 +24,16 @@
     <b-popover
         target="query"
         triggers="focus"
-        placement="bottom"
+        placement="right"
+        id="query"
         > 
-        <span v-if="results.length==0">
+        <span v-if="!query">
         Type something to start search
         </span>
-        <template v-else>
+        <!-- <span v-else-if="results.length==0" >
+            No Results
+        </span> -->
+        <template v-else-if="results.length>0">
         <b-list-group>
         <b-list-group-item
             href="#"
@@ -45,6 +44,9 @@
             </b-list-group-item>
         </b-list-group>
         </template>
+        <span  v-else-if="results.length==0" >
+            No Results
+        </span>
     </b-popover>
     </div>  
 </template>
@@ -64,12 +66,13 @@ export default {
     },methods:{
         ...mapActions("articles",["loadTagList"]),
         searchTags(){
-            console.log("object")
+            
             if(this.query){
                 this.loadTagList(this.query)
             }
         },
         appendTag(tag){
+            this.$root.$emit('bv::hide::popover','query')
             const exist= this.addedTags.includes(tag)
             if(!exist){
                 this.addedTags.push(tag)
